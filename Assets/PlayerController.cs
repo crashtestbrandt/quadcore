@@ -50,7 +50,7 @@ public class PlayerController : MonoBehaviour
     void WhileBallGrabbed()
     {
         //Vector2 MousePos = InputDevice.current.Pointer.position.ReadValue();
-        Vector2 MousePos = Touchscreen.current.position.ReadValue();
+        Vector2 MousePos = Pointer.current.position.ReadValue();
         Vector3 MousePosTo3D = new Vector3(MousePos.x, MousePos.y, 0.3f);
         Vector3 WorldPosition = MainCamera.ScreenToWorldPoint(MousePosTo3D);
         Debug.Log("Ball held at " + WorldPosition);
