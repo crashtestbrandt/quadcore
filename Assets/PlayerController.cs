@@ -6,8 +6,12 @@ using UnityEngine.InputSystem;
 public class PlayerController : MonoBehaviour
 {
     public Camera MainCamera;
-
+    public SphereCollider ballCollider;
     bool BallGrabbed = false;
+
+    public GameObject ball; // TODO: Remove when ball becomes rigid body
+    
+    Ray ray;
     // Start is called before the first frame update
     void Start()
     {
@@ -22,25 +26,35 @@ public class PlayerController : MonoBehaviour
 
     public void OnGrab(InputAction.CallbackContext context)
     {
-        if (context.phase == InputActionPhase.Started)
+        ray = MainCamera.ScreenPointToRay(Mouse.current.position.ReadValue());
+        RaycastHit hitData;
+        if (BallGrabbed)
         {
-            BallGrabbed = true;
-            Debug.Log("Ball grabbed at " + Mouse.current.position.ReadValue());
-        }
-        if (context.phase == InputActionPhase.Canceled)
+            if (context.phase == InputActionPhase.Canceled)
+            {
+                BallGrabbed = false;
+            }
+            
+        } else
         {
-            BallGrabbed = false;
-            Debug.Log("Ball released at " + Mouse.current.position.ReadValue());
+            if (context.phase == InputActionPhase.Started)
+            {
+                if (ballCollider.Raycast(ray, out hitData, 20))
+                {
+                    BallGrabbed = true;
+                }
+            }
         }
-        //Debug.Log("Ball grabbed");
-        //Debug.Log(context);
-        //Debug.Log(Mouse.current.position.ReadValue());
     }
 
     void WhileBallGrabbed()
     {
-        Debug.Log("Ball still held at " + Mouse.current.position.ReadValue());
+        Vector2 MousePos = Mouse.current.position.ReadValue();
+        Vector3 MousePosTo3D = new Vector3(MousePos.x, MousePos.y, 0.3f);
+        Vector3 WorldPosition = MainCamera.ScreenToWorldPoint(MousePosTo3D);
+        Debug.Log("Ball held at " + WorldPosition);
 
+        ball.transform.position = new Vector3(WorldPosition.x, WorldPosition.y, ball.transform.position.z);
     }
 
 
