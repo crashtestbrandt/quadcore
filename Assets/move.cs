@@ -7,14 +7,13 @@ public class move : MonoBehaviour
     
     private Touch touch;
     private float speedModifier;
-    public SpringJoint spring;
+    public GameObject PaperBall;
     private bool alreadyTouched;
     
     // Start is called before the first frame update
     void Start()
     {
         speedModifier = 0.001f;
-        // spring = this.SpringJoint;
         alreadyTouched = false;
     }
 
@@ -31,12 +30,12 @@ public class move : MonoBehaviour
                     transform.position.z + touch.deltaPosition.y * speedModifier
                 );
                 alreadyTouched = true;
-                spring.spring = 25;
+                PaperBall.GetComponent<SpringJoint>().spring = 25;
             }
         } else {
             if (alreadyTouched) {
                 // Destroy(spring);
-                spring.spring = 0;
+                PaperBall.GetComponent<SpringJoint>().spring = 0;
             }
         }
     }
