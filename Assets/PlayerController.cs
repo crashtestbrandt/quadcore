@@ -26,7 +26,7 @@ public class PlayerController : MonoBehaviour
 
     public void OnGrab(InputAction.CallbackContext context)
     {
-        ray = MainCamera.ScreenPointToRay(Mouse.current.position.ReadValue());
+        ray = MainCamera.ScreenPointToRay(Pointer.current.position.ReadValue());
         RaycastHit hitData;
         if (BallGrabbed)
         {
@@ -45,6 +45,11 @@ public class PlayerController : MonoBehaviour
                 }
             }
         }
+    }
+
+    void OnLook(InputAction.CallbackContext context)
+    {
+
     }
 
     void WhileBallGrabbed()
