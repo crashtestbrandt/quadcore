@@ -38,8 +38,6 @@ public class PlayerController : MonoBehaviour
             if (context.phase == InputActionPhase.Canceled)
             {
                 BallGrabbed = false;
-                Debug.Log("Ball launced with velocity:\t" + launchVelocity);
-                Debug.Log("\tWith speed factor:\t\t" + SpeedFactor * launchVelocity);
                 ball.GetComponentInChildren<BallController>().Launch(SpeedFactor * launchVelocity);
             }
             
@@ -62,8 +60,6 @@ public class PlayerController : MonoBehaviour
         Vector3 pointerPositionToWorldPosition = MainCamera.ScreenToWorldPoint(
             new Vector3(pointerPosition.x, pointerPosition.y, MainCamera.nearClipPlane + BallZOffset)
         );
-        Debug.Log("\nPointer Position:\t" + pointerPosition);
-        Debug.Log("Pointer Position to World:\t" + pointerPositionToWorldPosition);
 
         ball.transform.position = pointerPositionToWorldPosition;
 
