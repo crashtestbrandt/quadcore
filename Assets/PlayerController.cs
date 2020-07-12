@@ -8,9 +8,11 @@ public class PlayerController : MonoBehaviour
     public Camera MainCamera;
     bool BallGrabbed = false;
 
-    public GameObject ball;
+    GameObject ball;
+    public GameObject BallPrefab;
 
     public float BallZOffset = 0.5f;
+    public float BallYOffset = 1.3f;
     public float SpeedFactor = 1.0f;
 
     Vector3 launchVelocity = Vector3.zero;
@@ -20,7 +22,20 @@ public class PlayerController : MonoBehaviour
 
     void Start()
     {
+        StartTurn();
+    }
 
+    public void StartTurn()
+    {
+        ball = Instantiate(
+            BallPrefab,
+            new Vector3(
+                transform.position.x,
+                transform.position.y + BallYOffset,
+                transform.position.z + MainCamera.nearClipPlane + BallZOffset
+            ),
+            Quaternion.AngleAxis(45.0f, transform.right)
+            );
     }
 
     void FixedUpdate()
