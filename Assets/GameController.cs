@@ -32,7 +32,7 @@ public class GameController : MonoBehaviour
             GameObject.Destroy(ball);
         }
 
-        player.StartTurn();
+        if (player != null) player.StartTurn();
 
     }
 
