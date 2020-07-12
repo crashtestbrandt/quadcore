@@ -6,16 +6,21 @@ using UnityEngine.InputSystem;
 public class PlayerController : MonoBehaviour
 {
     public Camera MainCamera;
-    public SphereCollider ballCollider;
     bool BallGrabbed = false;
 
-    public GameObject ball; // TODO: Remove when ball becomes rigid body
+    public GameObject ball;
+
+    public float BallZOffset = 0.5f;
+    public float SpeedFactor = 1.0f;
+
+    Vector3 launchVelocity = Vector3.zero;
+    Vector3 lastBallPosition = Vector3.zero;
     
     Ray ray;
-    // Start is called before the first frame update
+
     void Start()
     {
-        
+
     }
 
     void FixedUpdate()
@@ -33,35 +38,38 @@ public class PlayerController : MonoBehaviour
             if (context.phase == InputActionPhase.Canceled)
             {
                 BallGrabbed = false;
+                Debug.Log("Ball launced with velocity:\t" + launchVelocity);
+                Debug.Log("\tWith speed factor:\t\t" + SpeedFactor * launchVelocity);
+                ball.GetComponentInChildren<BallController>().Launch(SpeedFactor * launchVelocity);
             }
             
         } else
         {
             if (context.phase == InputActionPhase.Started)
             {
-                if (ballCollider.Raycast(ray, out hitData, 20))
+                if (ball.GetComponentInChildren<Collider>().Raycast(ray, out hitData, 20))
                 {
+                    lastBallPosition = ball.transform.position;
                     BallGrabbed = true;
                 }
             }
         }
     }
 
-    void OnLook(InputAction.CallbackContext context)
-    {
-
-    }
-
     void WhileBallGrabbed()
     {
-        //Vector2 MousePos = InputDevice.current.Pointer.position.ReadValue();
-        Vector2 MousePos = Pointer.current.position.ReadValue();
-        Vector3 MousePosTo3D = new Vector3(MousePos.x, MousePos.y, 0.3f);
-        Vector3 WorldPosition = MainCamera.ScreenToWorldPoint(MousePosTo3D);
-        Debug.Log("Ball held at " + WorldPosition);
+        Vector2 pointerPosition = Pointer.current.position.ReadValue();
+        Vector3 pointerPositionToWorldPosition = MainCamera.ScreenToWorldPoint(
+            new Vector3(pointerPosition.x, pointerPosition.y, MainCamera.nearClipPlane + BallZOffset)
+        );
+        Debug.Log("\nPointer Position:\t" + pointerPosition);
+        Debug.Log("Pointer Position to World:\t" + pointerPositionToWorldPosition);
 
-        ball.transform.position = new Vector3(WorldPosition.x, WorldPosition.y, ball.transform.position.z);
+        ball.transform.position = pointerPositionToWorldPosition;
+
+        launchVelocity = ((ball.transform.position.y - lastBallPosition.y) * ball.transform.up +
+            (ball.transform.position.x - lastBallPosition.x) * ball.transform.right) / Time.fixedDeltaTime;
+
+        lastBallPosition = ball.transform.position;
     }
-
-
 }

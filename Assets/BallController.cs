@@ -12,8 +12,7 @@ public class BallController : MonoBehaviour
     void Start()
     {
         rb.isKinematic = true;
-        if (autoBall) Launch(speed * new Vector3(0.0f, 1.0f, 1.0f));
-        //rb.velocity = speed * new Vector3(0.0f, 1.0f, 1.0f);
+        if (autoBall) Launch(speed * transform.up);
     }
 
     // Update is called once per frame
