@@ -60,6 +60,7 @@ public class GameController : MonoBehaviour
         {
             Debug.Log("Attempting to create player " + currentPlayer + " ...");
             players[currentPlayer-1] = Instantiate(PlayerPrefab, new Vector3(0,0,2), Quaternion.identity);
+            players[currentPlayer-1].GetComponent<PlayerController>().PlayerNumber = currentPlayer;
         }
 
         // Make sure this player is active, whether newly created or not

@@ -20,6 +20,8 @@ public class PlayerController : MonoBehaviour
     
     Ray ray;
 
+    public int PlayerNumber { get; set; }
+
     void Awake()
     {
         Debug.Log("Created a player.");
@@ -45,6 +47,8 @@ public class PlayerController : MonoBehaviour
             ),
             Quaternion.AngleAxis(45.0f, transform.right)
             );
+        if (PlayerNumber == 1) ball.GetComponentInChildren<Renderer>().material.color = Color.red;
+        else if (PlayerNumber == 2) ball.GetComponentInChildren<Renderer>().material.color = Color.blue;
     }
 
     void FixedUpdate()
