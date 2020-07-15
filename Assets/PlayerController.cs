@@ -5,7 +5,7 @@ using UnityEngine.InputSystem;
 
 public class PlayerController : MonoBehaviour
 {
-    public Camera MainCamera;
+    Camera mainCamera;
     bool BallGrabbed = false;
 
     GameObject ball;
@@ -20,19 +20,28 @@ public class PlayerController : MonoBehaviour
     
     Ray ray;
 
+    void Awake()
+    {
+        Debug.Log("Created a player.");
+        mainCamera = Camera.main;
+    }
     void Start()
     {
-        StartTurn();
+        //mainCamera = Camera.main;
+        //StartTurn();
+        
     }
 
     public void StartTurn()
     {
+        Debug.Log("Player starting turn");
+
         ball = Instantiate(
             BallPrefab,
             new Vector3(
                 transform.position.x,
                 transform.position.y + BallYOffset,
-                transform.position.z + MainCamera.nearClipPlane + BallZOffset
+                transform.position.z + mainCamera.nearClipPlane + BallZOffset
             ),
             Quaternion.AngleAxis(45.0f, transform.right)
             );
@@ -46,7 +55,7 @@ public class PlayerController : MonoBehaviour
 
     public void OnGrab(InputAction.CallbackContext context)
     {
-        ray = MainCamera.ScreenPointToRay(Pointer.current.position.ReadValue());
+        ray = mainCamera.ScreenPointToRay(Pointer.current.position.ReadValue());
         RaycastHit hitData;
         if (BallGrabbed)
         {
@@ -72,8 +81,8 @@ public class PlayerController : MonoBehaviour
     void WhileBallGrabbed()
     {
         Vector2 pointerPosition = Pointer.current.position.ReadValue();
-        Vector3 pointerPositionToWorldPosition = MainCamera.ScreenToWorldPoint(
-            new Vector3(pointerPosition.x, pointerPosition.y, MainCamera.nearClipPlane + BallZOffset)
+        Vector3 pointerPositionToWorldPosition = mainCamera.ScreenToWorldPoint(
+            new Vector3(pointerPosition.x, pointerPosition.y, mainCamera.nearClipPlane + BallZOffset)
         );
 
         ball.transform.position = pointerPositionToWorldPosition;
@@ -82,5 +91,9 @@ public class PlayerController : MonoBehaviour
             (ball.transform.position.x - lastBallPosition.x) * ball.transform.right) / Time.fixedDeltaTime;
 
         lastBallPosition = ball.transform.position;
+    }
+
+    private void OnDisable() {
+        if (ball != null) Destroy(ball);
     }
 }
