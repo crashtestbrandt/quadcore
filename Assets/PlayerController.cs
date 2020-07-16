@@ -49,6 +49,8 @@ public class PlayerController : MonoBehaviour
             );
         if (PlayerNumber == 1) ball.GetComponentInChildren<Renderer>().material.color = Color.red;
         else if (PlayerNumber == 2) ball.GetComponentInChildren<Renderer>().material.color = Color.blue;
+        lastBallPosition = ball.transform.position;
+        launchVelocity = Vector3.zero;
     }
 
     void FixedUpdate()
