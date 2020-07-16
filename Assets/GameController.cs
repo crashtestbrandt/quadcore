@@ -36,13 +36,6 @@ public class GameController : MonoBehaviour
         Debug.Log("Reset requested! Waiting " + ResetDelaySeconds + " seconds ...");
         await Task.Delay(TimeSpan.FromSeconds(ResetDelaySeconds));
         Debug.Log("Resetting.");
-        /*
-        GameObject[] balls = GameObject.FindGameObjectsWithTag("Ball");
-        foreach (GameObject ball in balls)
-        {
-            GameObject.Destroy(ball);
-        }
-        */
 
         // If a turn just ended
         if (players[currentPlayer-1] != null)
@@ -75,7 +68,7 @@ public class GameController : MonoBehaviour
     private void OnDestroy() {
         foreach (GameObject player in players)
         {
-            Destroy(player);
+            if (player != null) Destroy(player);
         }
     }
 }
