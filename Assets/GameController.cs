@@ -20,6 +20,7 @@ public class GameController : MonoBehaviour
         players = new GameObject[2];
         currentPlayer = UnityEngine.Random.Range(1,3);
         FloorController.BallCollidedWithFloorEvent += OnReset;
+        BallGrabber.BallGrabbedByCellEvent += OnReset;
 
         OnReset();
     }
