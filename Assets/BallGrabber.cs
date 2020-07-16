@@ -21,8 +21,10 @@ public class BallGrabber : MonoBehaviour
 
     private void OnTriggerEnter(Collider collider) {
         Debug.Log("A ball entered the grabber's space.");
-        collider.gameObject.transform.parent = this.transform;
+        //collider.gameObject.transform.parent = this.transform;
+        collider.gameObject.transform.parent = null;
         collider.gameObject.transform.position = this.transform.position;
+        this.transform.position = this.transform.position + 0.14f * this.transform.up;
         BallGrabbedByCellEvent();
     }
 }
