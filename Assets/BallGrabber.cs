@@ -5,7 +5,7 @@ using System;
 
 public class BallGrabber : MonoBehaviour
 {
-    public delegate void BallGrabbedByCellEvent(int row, int column);
+    public delegate void BallGrabbedByCellEvent(int row, int column, string tag);
 
     public static BallGrabbedByCellEvent BallGrabbedByCell;
     public float CellWidth = 0.14f;
@@ -40,11 +40,12 @@ public class BallGrabber : MonoBehaviour
 
     private void OnTriggerEnter(Collider collider) {
         Debug.Log("A ball entered the grabber's space.");
-        //collider.gameObject.transform.parent = this.transform;
+
         collider.gameObject.transform.parent = null;
         collider.gameObject.transform.position = this.transform.position;
-        //this.transform.position = this.transform.position + 0.14f * this.transform.up;
-        BallGrabbedByCell(Row, Column);
+
+        BallGrabbedByCell(Row, Column, collider.gameObject.tag);
+
         if (this.Row < NumRows - 1)
         {
             this.Row = this.Row + 1;

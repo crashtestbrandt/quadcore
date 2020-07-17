@@ -5,16 +5,20 @@ using System;
 
 public class BoardController : MonoBehaviour
 {
-    public int NumColumns = 7;
-    public int NumRows = 6;
+    public const int NumColumns = 7;
+    public const int NumRows = 6;
     public float CellWidth = 0.14f;
 
     private List<BallGrabber> grabbers;
+
+    private GameObject[,] board;
 
     public GameObject CellPrefab;
     // Start is called before the first frame update
     void Start()
     {
+        board = new GameObject[6,7];
+
         grabbers = new List<BallGrabber>();
         for (int i = 0; i < NumColumns; i++)
         {
@@ -31,8 +35,13 @@ public class BoardController : MonoBehaviour
         
     }
 
-    public void OnGrabberTriggered(int row, int column)
+    public void OnGrabberTriggered(int row, int column, string tag)
     {
-        Debug.Log("Board was notify that cell {" + row + "," + column + "} grabbed a ball.");
+        Debug.Log("Board was notify that cell {" + row + "," + column + "} grabbed a ball from " + tag + ".");
+        if (board[row,column] == null)
+        {
+            board[row,column] = new GameObject();
+            board[row,column].tag = tag;
+        }
     }
 }

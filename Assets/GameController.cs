@@ -65,7 +65,7 @@ public class GameController : MonoBehaviour
 
     }
 
-    void ResetRequestedByBoard(int x, int y)
+    void ResetRequestedByBoard(int x, int y, string tag)
     {
         OnReset();
     }
