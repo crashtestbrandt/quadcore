@@ -13,6 +13,8 @@ public class GameController : MonoBehaviour
     GameObject[] players;
     int currentPlayer;
 
+    bool quitting = false;
+
     public float ResetDelaySeconds = 3.0f; 
     // Start is called before the first frame update
     void Start()
@@ -35,6 +37,9 @@ public class GameController : MonoBehaviour
     {
         Debug.Log("Reset requested! Waiting " + ResetDelaySeconds + " seconds ...");
         await Task.Delay(TimeSpan.FromSeconds(ResetDelaySeconds));
+
+        if (quitting) return;
+        
         Debug.Log("Resetting.");
 
         // If a turn just ended
@@ -75,5 +80,7 @@ public class GameController : MonoBehaviour
         {
             if (player != null) Destroy(player);
         }
+        quitting = true;
+        Destroy(this);
     }
 }
