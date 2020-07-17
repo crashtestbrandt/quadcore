@@ -42,6 +42,90 @@ public class BoardController : MonoBehaviour
         {
             board[row,column] = new GameObject();
             board[row,column].tag = tag;
+            if (CheckForWin(row, column, tag))
+            {
+                Debug.Log(tag + " WINS THE GAME!");
+            }
         }
+    }
+
+    bool CheckForWin(int row, int column, string tag)
+    {
+        int matches = 0;
+
+        // Check vertically
+        Debug.Log("Checking for win with: " + ((board == null)? "No board!" : " a valid board."));
+        for (int i = row; i < NumRows; i++)
+        {
+            Debug.Log("Checking (" + i + "," + column + ")");
+            if (board[i,column]?.tag == tag) matches++;
+            else break;
+
+            if (matches == 4) return true;
+        }
+        for (int i = row-1; i > NumRows-5; i--)
+        {
+            if (board[i,column]?.tag == tag) matches++;
+            else break;
+
+            if (matches == 4) return true;
+        }
+
+        matches = 0;
+
+        // Check horizontally
+        for (int j = column; j < NumColumns; j++)
+        {
+            if (board[row,j]?.tag == tag) matches++;
+            else break;
+
+            if (matches == 4) return true;
+        }
+        for (int j = column-1; j > NumColumns-5; j--)
+        {
+            if (board[row,j]?.tag == tag) matches++;
+            else break;
+
+            if (matches == 4) return true;
+        }
+
+        matches = 0;
+
+        // Check diagonally one way
+        for (int i = row, j = column; i < NumRows && j < NumColumns; i++, j++)
+        {
+            if (board[row,j]?.tag == tag) matches++;
+            else break;
+
+            if (matches == 4) return true;
+        }
+
+        for (int i = row-1, j = column-1; i > NumRows-5 && j < NumColumns-5; i--, j--)
+        {
+            if (board[row,j]?.tag == tag) matches++;
+            else break;
+
+            if (matches == 4) return true;
+        }
+
+        matches = 0;
+
+        // Check diagonally the other way
+        for (int i = row, j = column; i > NumRows-5 && j < NumColumns; i--, j++)
+        {
+            if (board[row,j]?.tag == tag) matches++;
+            else break;
+
+            if (matches == 4) return true;
+        }
+
+        for (int i = row+1, j = column-1; i > NumRows && j < NumColumns-5; i++, j--)
+        {
+            if (board[row,j]?.tag == tag) matches++;
+            else break;
+
+            if (matches == 4) return true;
+        }
+        return false;
     }
 }
