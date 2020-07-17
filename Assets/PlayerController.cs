@@ -69,11 +69,11 @@ public class PlayerController : MonoBehaviour
             {
                 BallGrabbed = false;
 
-                // Replace "Ball" tag with "PlayerX" tag
-                //ball.gameObject.tag = "Player" + PlayerNumber.ToString();
                 ball.GetComponentInChildren<Collider>().gameObject.tag = "Player" + PlayerNumber.ToString();
 
                 ball.GetComponentInChildren<BallController>().Launch(SpeedFactor * launchVelocity);
+                
+                Debug.Log("Player " + PlayerNumber + " released ball with velocity: " + launchVelocity);
             }
             
         } else
@@ -84,6 +84,7 @@ public class PlayerController : MonoBehaviour
                 {
                     lastBallPosition = ball.transform.position;
                     BallGrabbed = true;
+                    Debug.Log("Player " + PlayerNumber + " grabbed the ball.");
                 }
             }
         }
