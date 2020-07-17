@@ -37,7 +37,7 @@ public class BoardController : MonoBehaviour
 
     public void OnGrabberTriggered(int row, int column, string tag)
     {
-        Debug.Log("Board was notify that cell {" + row + "," + column + "} grabbed a ball from " + tag + ".");
+        Debug.Log("Board was notified that cell {" + row + "," + column + "} grabbed a ball from " + tag + ".");
         if (board[row,column] == null)
         {
             board[row,column] = new GameObject();

@@ -2870,8 +2870,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 027566450f26a7d47a91e8cb5feddd3e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  NumColumns: 7
-  NumRows: 6
   CellWidth: 0.14
   CellPrefab: {fileID: 1378538176759957258, guid: 504f77673e77b7d4ba3f25b6c4ef8576,
     type: 3}
