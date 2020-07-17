@@ -63,8 +63,9 @@ public class BoardController : MonoBehaviour
 
             if (matches == 4) return true;
         }
-        for (int i = row-1; i > NumRows-5; i--)
+        for (int i = row-1; i >=0; i--)
         {
+            Debug.Log("Checking (" + i + "," + column + ")");
             if (board[i,column]?.tag == tag) matches++;
             else break;
 
@@ -76,13 +77,15 @@ public class BoardController : MonoBehaviour
         // Check horizontally
         for (int j = column; j < NumColumns; j++)
         {
+            Debug.Log("Checking (" + row + "," + j + ")");
             if (board[row,j]?.tag == tag) matches++;
             else break;
 
             if (matches == 4) return true;
         }
-        for (int j = column-1; j > NumColumns-5; j--)
+        for (int j = column-1; j >=0; j--)
         {
+            Debug.Log("Checking (" + row + "," + j + ")");
             if (board[row,j]?.tag == tag) matches++;
             else break;
 
@@ -94,14 +97,16 @@ public class BoardController : MonoBehaviour
         // Check diagonally one way
         for (int i = row, j = column; i < NumRows && j < NumColumns; i++, j++)
         {
+            Debug.Log("Checking (" + i + "," + j + ")");
             if (board[row,j]?.tag == tag) matches++;
             else break;
 
             if (matches == 4) return true;
         }
 
-        for (int i = row-1, j = column-1; i > NumRows-5 && j < NumColumns-5; i--, j--)
+        for (int i = row-1, j = column-1; i >= 0 && j >= 0; i--, j--)
         {
+            Debug.Log("Checking (" + i + "," + j + ")");
             if (board[row,j]?.tag == tag) matches++;
             else break;
 
@@ -111,16 +116,18 @@ public class BoardController : MonoBehaviour
         matches = 0;
 
         // Check diagonally the other way
-        for (int i = row, j = column; i > NumRows-5 && j < NumColumns; i--, j++)
+        for (int i = row, j = column; i >= 0 && j < NumColumns; i--, j++)
         {
+            Debug.Log("Checking (" + i + "," + j + ")");
             if (board[row,j]?.tag == tag) matches++;
             else break;
 
             if (matches == 4) return true;
         }
 
-        for (int i = row+1, j = column-1; i > NumRows && j < NumColumns-5; i++, j--)
+        for (int i = row+1, j = column-1; i < NumRows && j >= 0; i++, j--)
         {
+            Debug.Log("Checking (" + i + "," + j + ")");
             if (board[row,j]?.tag == tag) matches++;
             else break;
 
