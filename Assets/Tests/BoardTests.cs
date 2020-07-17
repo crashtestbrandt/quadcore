@@ -12,7 +12,9 @@ namespace Tests
         [Test]
         public void BoardSimplePasses()
         {
+            //UnityEngine.SceneManagement.SceneManager.LoadScene("TestScene");
             // Use the Assert class to test conditions
+            
         }
 
         // A UnityTest behaves like a coroutine in Play Mode. In Edit Mode you can use
@@ -21,6 +23,9 @@ namespace Tests
         public IEnumerator BoardWithEnumeratorPasses()
         {
             // Use the Assert class to test conditions.
+            GameObject game = 
+                MonoBehaviour.Instantiate(Resources.Load<GameObject>("Prefabs/Game"));
+            Assert.IsNotNull(game);
             // Use yield to skip a frame.
             yield return null;
         }
