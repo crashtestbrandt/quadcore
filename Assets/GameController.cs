@@ -20,7 +20,7 @@ public class GameController : MonoBehaviour
         players = new GameObject[2];
         currentPlayer = UnityEngine.Random.Range(1,3);
         FloorController.BallCollidedWithFloorEvent += OnReset;
-        BallGrabber.BallGrabbedByCellEvent += OnReset;
+        BallGrabber.BallGrabbedByCell += ResetRequestedByBoard;
 
         OnReset();
     }
@@ -63,6 +63,11 @@ public class GameController : MonoBehaviour
         Debug.Log("Attempting to start turn for player " + currentPlayer + " ...");
         players[currentPlayer-1].GetComponent<PlayerController>().StartTurn();
 
+    }
+
+    void ResetRequestedByBoard(int x, int y)
+    {
+        OnReset();
     }
 
     private void OnDestroy() {

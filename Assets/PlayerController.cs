@@ -68,6 +68,9 @@ public class PlayerController : MonoBehaviour
             if (context.phase == InputActionPhase.Canceled)
             {
                 BallGrabbed = false;
+
+                // Replace "Ball" tag with "PlayerX" tag
+                ball.gameObject.tag = "Player" + PlayerNumber.ToString();
                 ball.GetComponentInChildren<BallController>().Launch(SpeedFactor * launchVelocity);
             }
             
@@ -75,7 +78,7 @@ public class PlayerController : MonoBehaviour
         {
             if (context.phase == InputActionPhase.Started)
             {
-                if (ball.GetComponentInChildren<Collider>().Raycast(ray, out hitData, 20))
+                if (ball.GetComponentInChildren<Collider>().Raycast(ray, out hitData, 0.5f))
                 {
                     lastBallPosition = ball.transform.position;
                     BallGrabbed = true;

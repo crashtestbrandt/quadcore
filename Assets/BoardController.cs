@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using System;
 
 public class BoardController : MonoBehaviour
 {
@@ -21,11 +22,17 @@ public class BoardController : MonoBehaviour
             grabbers[i].Row = 0;
             grabbers[i].Column = i;
         }
+        BallGrabber.BallGrabbedByCell += OnGrabberTriggered;
     }
 
     // Update is called once per frame
     void Update()
     {
         
+    }
+
+    public void OnGrabberTriggered(int row, int column)
+    {
+        Debug.Log("Board was notify that cell {" + row + "," + column + "} grabbed a ball.");
     }
 }
