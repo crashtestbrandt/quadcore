@@ -3,28 +3,34 @@ using System.Collections.Generic;
 using UnityEngine;
 using System.Threading.Tasks;
 using System;
+using UnityEngine.UI;
 
 public class GameController : MonoBehaviour
 {
-    //public PlayerController player; // TODO: Remove
-
     public GameObject PlayerPrefab;
     public GameObject BallPrefab;
+    public GameObject InfoUI;
+
     GameObject[] players;
     int currentPlayer;
 
     public static bool Quitting { get; set; } = false;
 
-    public float ResetDelaySeconds = 3.0f; 
-    // Start is called before the first frame update
+    public float ResetDelaySeconds = 3.0f;
+
     void Start()
     {
+        InfoUI.SetActive(false);
+
         players = new GameObject[2];
         currentPlayer = UnityEngine.Random.Range(1,3);
-        FloorController.BallCollidedWithFloorEvent += OnReset;
-        BallGrabber.BallGrabbedByCell += ResetRequestedByBoard;
 
-        OnReset();
+        // Register callbacks
+        FloorController.BallCollidedWithFloorEvent += OnResetTurn;
+        BallGrabber.BallGrabbedByCell += OnResetRequestedByBoard;
+        BoardController.GameOver += OnGameOver;
+
+        OnResetTurn();
     }
 
     // Update is called once per frame
@@ -33,7 +39,7 @@ public class GameController : MonoBehaviour
         
     }
 
-    async void OnReset()
+    async void OnResetTurn()
     {
         Debug.Log("Reset requested! Waiting " + ResetDelaySeconds + " seconds ...");
         await Task.Delay(TimeSpan.FromSeconds(ResetDelaySeconds));
@@ -70,9 +76,26 @@ public class GameController : MonoBehaviour
 
     }
 
-    void ResetRequestedByBoard(int x, int y, string tag)
+    void OnResetRequestedByBoard(int x, int y, string tag)
     {
-        OnReset();
+        OnResetTurn();
+    }
+
+    void OnGameOver(string tag)
+    {
+        InfoUI.SetActive(true);
+        InfoUI.GetComponentInChildren<Text>().text = ((tag == "Player1")? "Player 1" : "Player 2") + " wins the game!";
+        
+
+        Debug.Log("Game over! Waiting ...");
+        //await Task.Delay(TimeSpan.FromSeconds(ResetDelaySeconds));
+
+        if (Quitting) return;
+    }
+
+    public void OnNewGame()
+    {
+        Debug.Log("New game requested!");
     }
 
     private void OnDestroy() {
@@ -83,4 +106,5 @@ public class GameController : MonoBehaviour
         Quitting = true;
         Destroy(this);
     }
+
 }

@@ -1,5 +1,18 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
+--- !u!65 &1762836669084484054
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1492858947841653892}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Size: {x: 0.02, y: 0.02, z: 0.04000006}
+  m_Center: {x: 0, y: 0, z: -0.01}
 --- !u!1 &1762836667787593694
 GameObject:
   m_ObjectHideFlags: 0
@@ -214,8 +227,8 @@ RectTransform:
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 0, y: 0, z: 0}
   m_Children: []
-  m_Father: {fileID: 1762836668731336577}
-  m_RootOrder: 2
+  m_Father: {fileID: 1762836668332655697}
+  m_RootOrder: 7
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
@@ -681,6 +694,7 @@ Transform:
   - {fileID: 1762836668731336577}
   - {fileID: 1762836668953113199}
   - {fileID: 1762836668144994189}
+  - {fileID: 1762836667800595470}
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -1608,7 +1622,6 @@ Transform:
   m_Children:
   - {fileID: 1762836668562891319}
   - {fileID: 1762836669303705512}
-  - {fileID: 1762836667800595470}
   m_Father: {fileID: 1762836668332655697}
   m_RootOrder: 4
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -2193,19 +2206,6 @@ BoxCollider:
   serializedVersion: 2
   m_Size: {x: 1, y: 1, z: 1}
   m_Center: {x: 0, y: 0, z: 0}
---- !u!65 &1762836669084484054
-BoxCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1492858947841653892}
-  m_Material: {fileID: 0}
-  m_IsTrigger: 0
-  m_Enabled: 1
-  serializedVersion: 2
-  m_Size: {x: 0.02, y: 0.02, z: 0.04000006}
-  m_Center: {x: 0, y: 0, z: -0.01}
 --- !u!1 &1762836669098672660
 GameObject:
   m_ObjectHideFlags: 0

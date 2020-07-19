@@ -15,6 +15,10 @@ public class BoardController : MonoBehaviour
 
     public GameObject CellPrefab;
     // Start is called before the first frame update
+
+    public delegate void GameOverEvent(string tag);
+    public static GameOverEvent GameOver;
+
     void Start()
     {
         if (board == null) board = new GameObject[6,7];
@@ -26,7 +30,10 @@ public class BoardController : MonoBehaviour
             grabbers[i].Row = 0;
             grabbers[i].Column = i;
         }
+
+        // Register callbacks
         BallGrabber.BallGrabbedByCell += OnGrabberTriggered;
+        GameOver += OnGameOver;
     }
 
     // Update is called once per frame
@@ -47,7 +54,7 @@ public class BoardController : MonoBehaviour
             board[row,column] = temp;
             if (CheckForWin(row, column, tag))
             {
-              Debug.Log(tag + " WINS THE GAME!");
+              GameOver(tag);
             }
         }
     }
@@ -174,5 +181,11 @@ public class BoardController : MonoBehaviour
     public void ClearBoard()
     {
         board = null;
+    }
+
+    void OnGameOver(string tag)
+    {
+        Debug.Log(tag + " WINS THE GAME!");
+        ClearBoard();
     }
 }
