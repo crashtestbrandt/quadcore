@@ -185,7 +185,7 @@ public class BoardController : MonoBehaviour
 
     void OnGameOver(string tag)
     {
-        Debug.Log(tag + " WINS THE GAME!");
+        Debug.Log(tag + " WINS");
         ClearBoard();
     }
 }

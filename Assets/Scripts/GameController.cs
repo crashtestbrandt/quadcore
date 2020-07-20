@@ -84,7 +84,7 @@ public class GameController : MonoBehaviour
     void OnGameOver(string tag)
     {
         InfoUI.SetActive(true);
-        InfoUI.GetComponentInChildren<Text>().text = ((tag == "Player1")? "Player 1" : "Player 2") + " wins the game!";
+        InfoUI.GetComponentInChildren<Text>().text = ((tag == "Player1")? "PLAYER 1" : "PLAYER 2") + " WINS";
         
 
         Debug.Log("Game over! Waiting ...");
