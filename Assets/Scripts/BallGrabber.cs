@@ -5,7 +5,6 @@ using System;
 
 public class BallGrabber : MonoBehaviour
 {
-    //public delegate void BallGrabbedByCellEvent(int row, int column, string tag);
     public delegate void BallGrabbedByCellEvent(int row, int column, GameObject ball);
 
     public static BallGrabbedByCellEvent BallGrabbedByCell;

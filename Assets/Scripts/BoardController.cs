@@ -16,13 +16,16 @@ public class BoardController : MonoBehaviour
     public GameObject CellPrefab;
     // Start is called before the first frame update
 
-    public delegate void GameOverEvent(string tag);
+    //public delegate void GameOverEvent(string tag);
+    public delegate void GameOverEvent(GameObject finalBall);
     public static GameOverEvent GameOver;
 
     void Start()
     {
         if (board == null) board = new GameObject[6,7];
 
+        CreateGrabbers();
+        /*
         grabbers = new List<BallGrabber>();
         for (int i = 0; i < NumColumns; i++)
         {
@@ -30,10 +33,28 @@ public class BoardController : MonoBehaviour
             grabbers[i].Row = 0;
             grabbers[i].Column = i;
         }
-
+        */
         // Register callbacks
         BallGrabber.BallGrabbedByCell += OnGrabberTriggered;
         GameOver += OnGameOver;
+    }
+
+    void CreateGrabbers()
+    {
+        if (grabbers != null)
+        {
+            foreach (BallGrabber grabber in grabbers)
+            {
+                GameObject.Destroy(grabber.gameObject);
+            }
+        }
+        grabbers = new List<BallGrabber>();
+        for (int i = 0; i < NumColumns; i++)
+        {
+            grabbers.Add(Instantiate(CellPrefab, this.transform.position + (0.5f * CellWidth * this.transform.forward), Quaternion.identity, this.transform).GetComponent<BallGrabber>());
+            grabbers[i].Row = 0;
+            grabbers[i].Column = i;
+        }
     }
 
     // Update is called once per frame
@@ -42,7 +63,6 @@ public class BoardController : MonoBehaviour
         
     }
 
-    //public void OnGrabberTriggered(int row, int column, string tag)
     public void OnGrabberTriggered(int row, int column, GameObject ball)
     {
         if (board == null) board = new GameObject[6,7];
@@ -55,12 +75,11 @@ public class BoardController : MonoBehaviour
             board[row,column] = ball;
             if (CheckForWin(row, column, ball))
             {
-              GameOver(ball.tag);
+              GameOver(ball);
             }
         }
     }
 
-    //public bool CheckForWin(int row, int column, string tag)
     public bool CheckForWin(int row, int column, GameObject ball)
     {
         int matches = 0;
@@ -182,12 +201,31 @@ public class BoardController : MonoBehaviour
 
     public void ClearBoard()
     {
-        board = null;
+        if (board != null)
+        {
+            for (int i = 0; i < NumRows; i++)
+            {
+                for (int j = 0; j < NumColumns; j++)
+                {
+                    if (board[i,j] != null)
+                    {
+                        GameObject.Destroy(board[i,j]);
+                    }
+                }
+            }
+        }
+        board = new GameObject[6,7];
     }
 
-    void OnGameOver(string tag)
+    void OnGameOver(GameObject finalBall)
     {
-        Debug.Log(tag + " WINS");
+        Debug.Log(finalBall.tag + " WINS");
+        
+    }
+
+    public void OnNewGame()
+    {
         ClearBoard();
+        CreateGrabbers();
     }
 }

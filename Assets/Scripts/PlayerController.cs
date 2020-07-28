@@ -78,7 +78,7 @@ public class PlayerController : MonoBehaviour
             
         } else
         {
-            if (context.phase == InputActionPhase.Started)
+            if (context.phase == InputActionPhase.Started && ball != null && this != null)
             {
                 if (ball.GetComponentInChildren<Collider>().Raycast(ray, out hitData, 0.5f))
                 {

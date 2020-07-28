@@ -15,21 +15,38 @@ public class GameController : MonoBehaviour
     int currentPlayer;
 
     public static bool Quitting { get; set; } = false;
+    public static bool GameOver { get; set; } = false;
 
     public float ResetDelaySeconds = 3.0f;
 
     void Start()
     {
-        InfoUI.SetActive(false);
+        //InfoUI.SetActive(false);
 
-        players = new GameObject[2];
-        currentPlayer = UnityEngine.Random.Range(1,3);
+        //players = new GameObject[2];
+        //currentPlayer = UnityEngine.Random.Range(1,3);
 
         // Register callbacks
         FloorController.BallCollidedWithFloorEvent += OnResetTurn;
         BallGrabber.BallGrabbedByCell += OnResetRequestedByBoard;
         BoardController.GameOver += OnGameOver;
 
+        //OnResetTurn();
+        StartNewGame();
+    }
+
+    void StartNewGame()
+    {
+        if (players != null)
+        {
+            foreach (GameObject player in players)
+            {
+                if (player != null) Destroy(player);
+            }
+        }
+        InfoUI.SetActive(false);
+        players = new GameObject[2];
+        currentPlayer = UnityEngine.Random.Range(1,3);
         OnResetTurn();
     }
 
@@ -78,13 +95,15 @@ public class GameController : MonoBehaviour
 
     void OnResetRequestedByBoard(int x, int y, GameObject ball)
     {
-        OnResetTurn();
+        if (!GameOver && !Quitting) OnResetTurn();
     }
 
-    void OnGameOver(string tag)
+    void OnGameOver(GameObject ball)
     {
+        GameOver = true;
+
         InfoUI.SetActive(true);
-        InfoUI.GetComponentInChildren<Text>().text = ((tag == "Player1")? "PLAYER 1" : "PLAYER 2") + " WINS";
+        InfoUI.GetComponentInChildren<Text>().text = ((ball.tag == "Player1")? "PLAYER 1" : "PLAYER 2") + " WINS";
         
 
         Debug.Log("Game over! Waiting ...");
@@ -96,6 +115,8 @@ public class GameController : MonoBehaviour
     public void OnNewGame()
     {
         Debug.Log("New game requested!");
+        GameOver = false;
+        if (!Quitting) StartNewGame();
     }
 
     private void OnDestroy() {
