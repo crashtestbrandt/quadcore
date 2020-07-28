@@ -6,6 +6,6 @@ EditorBuildSettings:
   serializedVersion: 2
   m_Scenes:
   - enabled: 1
-    path: Assets/Scenes/BoardReset.unity
-    guid: 7d18e3064bd81284caff5ddd2beeaf80
+    path: Assets/Scenes/OrbEffects.unity
+    guid: 7c7eca379f1215043b6cb6726dfdf055
   m_configObjects: {}
