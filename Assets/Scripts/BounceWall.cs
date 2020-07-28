@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class BouneWall : MonoBehaviour
+public class BounceWall : MonoBehaviour
 {
     public GameObject BounceEffectPrefab;
 
