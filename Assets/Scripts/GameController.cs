@@ -37,13 +37,6 @@ public class GameController : MonoBehaviour
 
     void StartNewGame()
     {
-        if (players != null)
-        {
-            foreach (GameObject player in players)
-            {
-                if (player != null) Destroy(player);
-            }
-        }
         InfoUI.SetActive(false);
         players = new GameObject[2];
         currentPlayer = UnityEngine.Random.Range(1,3);
@@ -61,7 +54,7 @@ public class GameController : MonoBehaviour
         Debug.Log("Reset requested! Waiting " + ResetDelaySeconds + " seconds ...");
         await Task.Delay(TimeSpan.FromSeconds(ResetDelaySeconds));
 
-        if (Quitting) return;
+        if (Quitting || GameOver) return;
 
         Debug.Log("Resetting.");
 
@@ -104,7 +97,13 @@ public class GameController : MonoBehaviour
 
         InfoUI.SetActive(true);
         InfoUI.GetComponentInChildren<Text>().text = ((ball.tag == "Player1")? "PLAYER 1" : "PLAYER 2") + " WINS";
-        
+        if (players != null)
+        {
+            foreach (GameObject player in players)
+            {
+                if (player != null) Destroy(player);
+            }
+        }
 
         Debug.Log("Game over! Waiting ...");
         //await Task.Delay(TimeSpan.FromSeconds(ResetDelaySeconds));
