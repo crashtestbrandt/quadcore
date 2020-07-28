@@ -142,9 +142,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 416e73c9d0b7ddd4f9b8e01ef011ff4c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  MainCamera: {fileID: 0}
-  BallPrefab: {fileID: 2806365362016205154, guid: 7963b04cbe7dea9458b9d8d429212096,
-    type: 3}
+  OrbPrefabs:
+  - {fileID: 534081381309949920, guid: cc106044a5184a940a565f712a13f72e, type: 3}
+  - {fileID: 167748750105281280, guid: 6cf5d8ed14f42f3428c394bb273c4e7d, type: 3}
   BallZOffset: 0.5
   BallYOffset: 1.3
   SpeedFactor: 1

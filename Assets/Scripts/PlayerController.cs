@@ -8,8 +8,9 @@ public class PlayerController : MonoBehaviour
     Camera mainCamera;
     bool BallGrabbed = false;
 
-    GameObject ball;
-    public GameObject BallPrefab;
+    GameObject orb;
+    GameObject ChosenOrbPrefab;
+    public GameObject[] OrbPrefabs;
 
     public float BallZOffset = 0.5f;
     public float BallYOffset = 1.3f;
@@ -37,7 +38,17 @@ public class PlayerController : MonoBehaviour
     public void StartTurn()
     {
         Debug.Log("Player starting turn");
-
+        ChosenOrbPrefab = OrbPrefabs[PlayerNumber-1];
+        orb = Instantiate(
+            ChosenOrbPrefab,
+            new Vector3(
+                transform.position.x,
+                transform.position.y + BallYOffset,
+                transform.position.z + mainCamera.nearClipPlane + BallZOffset
+            ),
+            Quaternion.AngleAxis(45.0f, transform.right)
+        );
+        /*
         ball = Instantiate(
             BallPrefab,
             new Vector3(
@@ -47,9 +58,10 @@ public class PlayerController : MonoBehaviour
             ),
             Quaternion.AngleAxis(45.0f, transform.right)
             );
-        if (PlayerNumber == 1) ball.GetComponentInChildren<Renderer>().material.color = Color.red;
-        else if (PlayerNumber == 2) ball.GetComponentInChildren<Renderer>().material.color = Color.blue;
-        lastBallPosition = ball.transform.position;
+        */
+        //if (PlayerNumber == 1) ball.GetComponentInChildren<Renderer>().material.color = Color.red;
+        //else if (PlayerNumber == 2) ball.GetComponentInChildren<Renderer>().material.color = Color.blue;
+        lastBallPosition = orb.transform.position;
         launchVelocity = Vector3.zero;
     }
 
@@ -69,20 +81,22 @@ public class PlayerController : MonoBehaviour
             {
                 BallGrabbed = false;
 
-                ball.GetComponentInChildren<Collider>().gameObject.tag = "Player" + PlayerNumber.ToString();
+                //orb.tag = "Player" + PlayerNumber.ToString();
+                orb.GetComponentInChildren<Collider>().gameObject.tag = "Player" + PlayerNumber.ToString();
 
-                ball.GetComponentInChildren<BallController>().Launch(SpeedFactor * launchVelocity);
+                //orb.GetComponentInChildren<BallController>().Launch(SpeedFactor * launchVelocity);
+                orb.GetComponent<BallController>().Launch(SpeedFactor * launchVelocity);
                 
                 Debug.Log("Player " + PlayerNumber + " released ball with velocity: " + launchVelocity);
             }
             
         } else
         {
-            if (context.phase == InputActionPhase.Started && ball != null && this != null)
+            if (context.phase == InputActionPhase.Started && orb != null && this != null)
             {
-                if (ball.GetComponentInChildren<Collider>().Raycast(ray, out hitData, 0.5f))
+                if (orb.GetComponentInChildren<Collider>().Raycast(ray, out hitData, 0.5f))
                 {
-                    lastBallPosition = ball.transform.position;
+                    lastBallPosition = orb.transform.position;
                     BallGrabbed = true;
                     Debug.Log("Player " + PlayerNumber + " grabbed the ball.");
                 }
@@ -97,15 +111,15 @@ public class PlayerController : MonoBehaviour
             new Vector3(pointerPosition.x, pointerPosition.y, mainCamera.nearClipPlane + BallZOffset)
         );
 
-        ball.transform.position = pointerPositionToWorldPosition;
+        orb.transform.position = pointerPositionToWorldPosition;
 
-        launchVelocity = ((ball.transform.position.y - lastBallPosition.y) * ball.transform.up +
-            (ball.transform.position.x - lastBallPosition.x) * ball.transform.right) / Time.fixedDeltaTime;
+        launchVelocity = ((orb.transform.position.y - lastBallPosition.y) * orb.transform.up +
+            (orb.transform.position.x - lastBallPosition.x) * orb.transform.right) / Time.fixedDeltaTime;
 
-        lastBallPosition = ball.transform.position;
+        lastBallPosition = orb.transform.position;
     }
 
     private void OnDisable() {
-        if (ball != null) Destroy(ball);
+        if (orb != null) Destroy(orb);
     }
 }
