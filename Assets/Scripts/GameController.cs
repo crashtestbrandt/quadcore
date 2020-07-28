@@ -76,7 +76,7 @@ public class GameController : MonoBehaviour
 
     }
 
-    void OnResetRequestedByBoard(int x, int y, string tag)
+    void OnResetRequestedByBoard(int x, int y, GameObject ball)
     {
         OnResetTurn();
     }

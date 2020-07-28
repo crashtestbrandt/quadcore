@@ -5,7 +5,8 @@ using System;
 
 public class BallGrabber : MonoBehaviour
 {
-    public delegate void BallGrabbedByCellEvent(int row, int column, string tag);
+    //public delegate void BallGrabbedByCellEvent(int row, int column, string tag);
+    public delegate void BallGrabbedByCellEvent(int row, int column, GameObject ball);
 
     public static BallGrabbedByCellEvent BallGrabbedByCell;
     public float CellWidth = 0.14f;
@@ -44,7 +45,7 @@ public class BallGrabber : MonoBehaviour
         collider.gameObject.transform.parent = null;
         collider.gameObject.transform.position = this.transform.position;
 
-        BallGrabbedByCell(Row, Column, collider.gameObject.tag);
+        BallGrabbedByCell(Row, Column, collider.gameObject);
 
         if (this.Row < NumRows - 1)
         {

@@ -32,7 +32,7 @@ namespace Tests
 
             gameController.gameObject.SetActive(true);
         }
-
+/*
         [Test]
         public void HorizontalWinCheckPasses()
         {
@@ -60,6 +60,7 @@ namespace Tests
             }
             gameController.gameObject.SetActive(true);
         }
+*/
 /*
         [Test]
         public void UpRightWinCheckPasses()
@@ -130,6 +131,7 @@ namespace Tests
             gameController.gameObject.SetActive(true);
         }
 */
+/*
         [Test]
         public void VerticalWinCheckPasses()
         {
@@ -157,7 +159,7 @@ namespace Tests
             }
             gameController.gameObject.SetActive(true);
         }
-
+*/
         // A UnityTest behaves like a coroutine in Play Mode. In Edit Mode you can use
         // `yield return null;` to skip a frame.
         [UnityTest]

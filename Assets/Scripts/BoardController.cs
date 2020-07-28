@@ -42,24 +42,26 @@ public class BoardController : MonoBehaviour
         
     }
 
-    public void OnGrabberTriggered(int row, int column, string tag)
+    //public void OnGrabberTriggered(int row, int column, string tag)
+    public void OnGrabberTriggered(int row, int column, GameObject ball)
     {
         if (board == null) board = new GameObject[6,7];
 
-        Debug.Log("Board was notified that cell {" + row + "," + column + "} grabbed a ball from " + tag + ".");
+        Debug.Log("Board was notified that cell {" + row + "," + column + "} grabbed a ball from " + ball.tag + ".");
         if (board[row,column] == null)
         {
-            GameObject temp = new GameObject();
-            temp.tag = tag;
-            board[row,column] = temp;
-            if (CheckForWin(row, column, tag))
+            //GameObject temp = new GameObject();
+            //temp.tag = ball.tag;
+            board[row,column] = ball;
+            if (CheckForWin(row, column, ball))
             {
-              GameOver(tag);
+              GameOver(ball.tag);
             }
         }
     }
 
-    public bool CheckForWin(int row, int column, string tag)
+    //public bool CheckForWin(int row, int column, string tag)
+    public bool CheckForWin(int row, int column, GameObject ball)
     {
         int matches = 0;
 
@@ -68,7 +70,7 @@ public class BoardController : MonoBehaviour
         for (int i = row; i < NumRows; i++)
         {
             Debug.Log("Checking (" + i + "," + column + "): " + ((board[i,column] == null) ? "null" : board[i,column].tag));
-            if (board[i,column]?.tag == tag)
+            if (board[i,column]?.tag == ball.tag)
             {
                 matches++;
                 Debug.Log("Matches: " + matches);
@@ -80,7 +82,7 @@ public class BoardController : MonoBehaviour
         for (int i = row-1; i >=0; i--)
         {
             Debug.Log("Checking (" + i + "," + column + "): " + ((board[i,column] == null) ? "null" : board[i,column].tag));
-            if (board[i,column]?.tag == tag)
+            if (board[i,column]?.tag == ball.tag)
             {
                 matches++;
                 Debug.Log("Matches: " + matches);
@@ -96,7 +98,7 @@ public class BoardController : MonoBehaviour
         for (int j = column; j < NumColumns; j++)
         {
             Debug.Log("Checking (" + row + "," + j + "): " + ((board[row,j] == null) ? "null" : board[row,j].tag));
-            if (board[row,j]?.tag == tag)
+            if (board[row,j]?.tag == ball.tag)
             {
                 matches++;
                 Debug.Log("Matches: " + matches);
@@ -108,7 +110,7 @@ public class BoardController : MonoBehaviour
         for (int j = column-1; j >=0; j--)
         {
             Debug.Log("Checking (" + row + "," + j + "): " + ((board[row,j] == null) ? "null" : board[row,j].tag));
-            if (board[row,j]?.tag == tag)
+            if (board[row,j]?.tag == ball.tag)
             {
                 matches++;
                 Debug.Log("Matches: " + matches);
@@ -124,7 +126,7 @@ public class BoardController : MonoBehaviour
         for (int i = row, j = column; i < NumRows && j < NumColumns; i++, j++)
         {
             Debug.Log("Checking (" + i + "," + j + "): " + ((board[i,j] == null) ? "null" : board[i,j].tag));
-            if (board[row,j]?.tag == tag)
+            if (board[row,j]?.tag == ball.tag)
             {
                 matches++;
                 Debug.Log("Matches: " + matches);
@@ -137,7 +139,7 @@ public class BoardController : MonoBehaviour
         for (int i = row-1, j = column-1; i >= 0 && j >= 0; i--, j--)
         {
             Debug.Log("Checking (" + i + "," + j + "): " + ((board[i,j] == null) ? "null" : board[i,j].tag));
-            if (board[row,j]?.tag == tag)
+            if (board[row,j]?.tag == ball.tag)
             {
                 matches++;
                 Debug.Log("Matches: " + matches);
@@ -153,7 +155,7 @@ public class BoardController : MonoBehaviour
         for (int i = row, j = column; i >= 0 && j < NumColumns; i--, j++)
         {
             Debug.Log("Checking (" + i + "," + j + ")");
-            if (board[row,j]?.tag == tag)
+            if (board[row,j]?.tag == ball.tag)
             {
                 matches++;
                 Debug.Log("Matches: " + matches);
@@ -166,7 +168,7 @@ public class BoardController : MonoBehaviour
         for (int i = row+1, j = column-1; i < NumRows && j >= 0; i++, j--)
         {
             Debug.Log("Checking (" + i + "," + j + ")");
-            if (board[row,j]?.tag == tag)
+            if (board[row,j]?.tag == ball.tag)
             {
                 matches++;
                 Debug.Log("Matches: " + matches);
