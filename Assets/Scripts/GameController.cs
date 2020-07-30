@@ -12,9 +12,12 @@ public class GameController : MonoBehaviour
     {
         LOCAL_MULTIPLAYER,
         LOCAL_AI,
-        NETWORK_MULTIPLAYER
+        NETWORK_MULTIPLAYER,
+        AI_VS_AI
     }
-    public GameModeType GameMode;
+    GameModeType gameMode;
+    public bool AllowGameModeOverride = false;
+    public GameModeType GameModeOverride = GameModeType.LOCAL_MULTIPLAYER;
 
     public GameObject PlayerPrefab;
     public GameObject AIPlayerPrefab;
@@ -33,11 +36,7 @@ public class GameController : MonoBehaviour
 
     void Start()
     {
-        GameMode = GameState.GameMode;
-        //InfoUI.SetActive(false);
-
-        //players = new GameObject[2];
-        //currentPlayer = UnityEngine.Random.Range(1,3);
+        if (AllowGameModeOverride) gameMode = (AllowGameModeOverride? GameModeOverride : GameState.GameMode);
 
         // Register callbacks
         FloorController.BallCollidedWithFloorEvent += OnResetTurn;
@@ -90,7 +89,7 @@ public class GameController : MonoBehaviour
         if (players[currentPlayer-1] == null)
         {
             Debug.Log("Attempting to create player " + currentPlayer + " ...");
-            switch (GameMode)
+            switch (gameMode)
             {
                 case GameModeType.LOCAL_MULTIPLAYER:
                     players[currentPlayer-1] = Instantiate(PlayerPrefab, this.transform.position, Quaternion.identity);
@@ -103,21 +102,15 @@ public class GameController : MonoBehaviour
                     break;
                 case GameModeType.NETWORK_MULTIPLAYER:
                     break;
+                case GameModeType.AI_VS_AI:
+                    players[currentPlayer-1] = Instantiate(AIPlayerPrefab, this.transform.position, Quaternion.identity);
+                    break;
                 default:
                     break;
             }
             players[currentPlayer-1].GetComponent<IPlayerController>().SetPlayerNumber(currentPlayer);
             players[currentPlayer-1].GetComponent<IPlayerController>().SetDebugTextObject((DebugText != null)? DebugText : null);
         }
-        /*
-        if (players[currentPlayer-1] == null)
-        {
-            Debug.Log("Attempting to create player " + currentPlayer + " ...");
-            players[currentPlayer-1] = Instantiate(PlayerPrefab, this.transform.position, Quaternion.identity);
-            players[currentPlayer-1].GetComponent<IPlayerController>().SetPlayerNumber(currentPlayer);
-            players[currentPlayer-1].GetComponent<IPlayerController>().SetDebugTextObject((DebugText != null)? DebugText : null);
-        }
-        */
 
         // Make sure this player is active, whether newly created or not
         players[currentPlayer-1].SetActive(true);
