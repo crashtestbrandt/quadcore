@@ -9,6 +9,8 @@ public class PlayerController : MonoBehaviour
     Camera mainCamera;
     bool BallGrabbed = false;
 
+    public float ThrowTimerSeconds = 7.0f;
+
     GameObject orb;
     GameObject ChosenOrbPrefab;
     public GameObject[] OrbPrefabs;
@@ -21,7 +23,7 @@ public class PlayerController : MonoBehaviour
 
     
 
-    //Vector3 launchVelocity = Vector3.zero;
+    // TODO: Make these into an array
     Vector3 lastOrbPosition = Vector3.zero;
     Vector3 secondToLastOrbPosition = Vector3.zero;
     Vector3 thirdToLastOrbPosition = Vector3.zero;
@@ -78,7 +80,7 @@ public class PlayerController : MonoBehaviour
     }
 
 
-    public void OnGrab(InputAction.CallbackContext context)
+    public async void OnGrab(InputAction.CallbackContext context)
     {
         ray = mainCamera.ScreenPointToRay(Pointer.current.position.ReadValue());
         RaycastHit hitData;

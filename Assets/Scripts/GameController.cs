@@ -30,6 +30,7 @@ public class GameController : MonoBehaviour
 
         // Register callbacks
         FloorController.BallCollidedWithFloorEvent += OnResetTurn;
+        BallController.ThrowTimer += OnResetTurn;
         BallGrabber.BallGrabbedByCell += OnResetRequestedByBoard;
         BoardController.GameOver += OnGameOver;
 
