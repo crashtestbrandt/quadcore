@@ -4,12 +4,10 @@ using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.UI;
 
-public class PlayerController : MonoBehaviour
+public class PlayerController : MonoBehaviour, IPlayerController
 {
     Camera mainCamera;
     bool BallGrabbed = false;
-
-    public float ThrowTimerSeconds = 7.0f;
 
     GameObject orb;
     GameObject ChosenOrbPrefab;
@@ -31,24 +29,18 @@ public class PlayerController : MonoBehaviour
     
     Ray ray;
 
-    public int PlayerNumber { get; set; }
+    int playerNumber;
 
     void Awake()
     {
         Debug.Log("Created a player.");
         mainCamera = Camera.main;
     }
-    void Start()
-    {
-        //mainCamera = Camera.main;
-        //StartTurn();
-        
-    }
 
     public void StartTurn()
     {
         Debug.Log("Player starting turn");
-        ChosenOrbPrefab = OrbPrefabs[PlayerNumber-1];
+        ChosenOrbPrefab = OrbPrefabs[playerNumber-1];
         orb = Instantiate(
             ChosenOrbPrefab,
             new Vector3(
@@ -80,7 +72,7 @@ public class PlayerController : MonoBehaviour
     }
 
 
-    public async void OnGrab(InputAction.CallbackContext context)
+    public void OnGrab(InputAction.CallbackContext context)
     {
         ray = mainCamera.ScreenPointToRay(Pointer.current.position.ReadValue());
         RaycastHit hitData;
@@ -119,11 +111,11 @@ public class PlayerController : MonoBehaviour
                     DebugText.text += "\n\nBall launching with velocity: " + launchVelocity;
                 }
                 
-                orb.GetComponentInChildren<Collider>().gameObject.tag = "Player" + PlayerNumber.ToString();
+                orb.GetComponentInChildren<Collider>().gameObject.tag = "Player" + playerNumber.ToString();
 
                 orb.GetComponent<BallController>().Launch(SpeedFactor * launchVelocity);
                 
-                Debug.Log("Player " + PlayerNumber + " released ball with velocity: " + launchVelocity);
+                Debug.Log("Player " + playerNumber + " released ball with velocity: " + launchVelocity);
             }
             
         } else
@@ -134,7 +126,7 @@ public class PlayerController : MonoBehaviour
                 {
                     lastOrbPosition = orb.transform.position;
                     BallGrabbed = true;
-                    Debug.Log("Player " + PlayerNumber + " grabbed the ball.");
+                    Debug.Log("Player " + playerNumber + " grabbed the ball.");
                 }
             }
         }
@@ -173,4 +165,15 @@ public class PlayerController : MonoBehaviour
     private void OnDisable() {
         if (orb != null) Destroy(orb);
     }
+
+    public void SetPlayerNumber(int num)
+    {
+        playerNumber = num;
+    }
+}
+
+public interface IPlayerController
+{
+    void SetPlayerNumber(int num);
+    void StartTurn();
 }

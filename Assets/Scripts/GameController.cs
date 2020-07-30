@@ -78,7 +78,7 @@ public class GameController : MonoBehaviour
         {
             Debug.Log("Attempting to create player " + currentPlayer + " ...");
             players[currentPlayer-1] = Instantiate(PlayerPrefab, this.transform.position, Quaternion.identity);
-            players[currentPlayer-1].GetComponent<PlayerController>().PlayerNumber = currentPlayer;
+            players[currentPlayer-1].GetComponent<PlayerController>().SetPlayerNumber(currentPlayer);
             players[currentPlayer-1].GetComponent<PlayerController>().DebugText = (DebugText != null)? DebugText : null;
         }
 
