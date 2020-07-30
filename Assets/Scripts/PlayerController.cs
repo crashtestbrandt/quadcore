@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
+using UnityEngine.UI;
 
 public class PlayerController : MonoBehaviour
 {
@@ -12,12 +13,19 @@ public class PlayerController : MonoBehaviour
     GameObject ChosenOrbPrefab;
     public GameObject[] OrbPrefabs;
 
+    public Text DebugText { get; set; } = null;
+
     public float BallZOffset = 0.5f;
     public float BallYOffset = 1.3f;
     public float SpeedFactor = 1.0f;
 
-    Vector3 launchVelocity = Vector3.zero;
-    Vector3 lastBallPosition = Vector3.zero;
+    
+
+    //Vector3 launchVelocity = Vector3.zero;
+    Vector3 lastOrbPosition = Vector3.zero;
+    Vector3 secondToLastOrbPosition = Vector3.zero;
+    Vector3 thirdToLastOrbPosition = Vector3.zero;
+    Vector3 fourthToLastOrbPosition = Vector3.zero;
     
     Ray ray;
 
@@ -48,21 +56,20 @@ public class PlayerController : MonoBehaviour
             ),
             Quaternion.AngleAxis(45.0f, transform.right)
         );
-        /*
-        ball = Instantiate(
-            BallPrefab,
-            new Vector3(
-                transform.position.x,
-                transform.position.y + BallYOffset,
-                transform.position.z + mainCamera.nearClipPlane + BallZOffset
-            ),
-            Quaternion.AngleAxis(45.0f, transform.right)
-            );
-        */
-        //if (PlayerNumber == 1) ball.GetComponentInChildren<Renderer>().material.color = Color.red;
-        //else if (PlayerNumber == 2) ball.GetComponentInChildren<Renderer>().material.color = Color.blue;
-        lastBallPosition = orb.transform.position;
-        launchVelocity = Vector3.zero;
+
+        fourthToLastOrbPosition = orb.transform.position;
+        thirdToLastOrbPosition = orb.transform.position;
+        secondToLastOrbPosition = orb.transform.position;
+        lastOrbPosition = orb.transform.position;
+        
+        if (DebugText != null)
+        {
+            DebugText.text = "Current position:\t\t\t\t" + orb.transform.position;
+            DebugText.text += "\nLast position:\t\t\t\t\t" + lastOrbPosition;
+            DebugText.text += "\nSecond-to-last position:\t" + secondToLastOrbPosition;
+            DebugText.text += "\nThird-to-last position:\t\t" + thirdToLastOrbPosition;
+            DebugText.text += "\nFourth-to-last position:\t" + fourthToLastOrbPosition;
+        }
     }
 
     void FixedUpdate()
@@ -81,10 +88,37 @@ public class PlayerController : MonoBehaviour
             {
                 BallGrabbed = false;
 
-                //orb.tag = "Player" + PlayerNumber.ToString();
+                Vector3[] velocities = {
+                    ((orb.transform.position.y - lastOrbPosition.y) * orb.transform.up +
+                        (orb.transform.position.x - lastOrbPosition.x) * orb.transform.right) / Time.fixedDeltaTime,
+                    ((orb.transform.position.y - secondToLastOrbPosition.y) * orb.transform.up +
+                        (orb.transform.position.x - secondToLastOrbPosition.x) * orb.transform.right) / (2*Time.fixedDeltaTime),
+                    ((orb.transform.position.y - thirdToLastOrbPosition.y) * orb.transform.up +
+                        (orb.transform.position.x - thirdToLastOrbPosition.x) * orb.transform.right) / (3*Time.fixedDeltaTime),
+                    ((orb.transform.position.y - fourthToLastOrbPosition.y) * orb.transform.up +
+                        (orb.transform.position.x - fourthToLastOrbPosition.x) * orb.transform.right) / (4*Time.fixedDeltaTime),
+                };
+                Vector3 launchVelocity = Vector3.zero;
+                foreach (Vector3 vel in velocities)
+                {
+                    if (vel.magnitude > launchVelocity.magnitude)
+                    {
+                        launchVelocity = vel;
+                    }
+                }
+
+                if (DebugText != null)
+                {
+                    DebugText.text = "Current position:\t\t\t\t" + orb.transform.position;
+                    DebugText.text += "\nLast position:\t\t\t\t\t" + lastOrbPosition;
+                    DebugText.text += "\nSecond-to-last position:\t" + secondToLastOrbPosition;
+                    DebugText.text += "\nThird-to-last position:\t\t" + thirdToLastOrbPosition;
+                    DebugText.text += "\nFourth-to-last position:\t" + fourthToLastOrbPosition;
+                    DebugText.text += "\n\nBall launching with velocity: " + launchVelocity;
+                }
+                
                 orb.GetComponentInChildren<Collider>().gameObject.tag = "Player" + PlayerNumber.ToString();
 
-                //orb.GetComponentInChildren<BallController>().Launch(SpeedFactor * launchVelocity);
                 orb.GetComponent<BallController>().Launch(SpeedFactor * launchVelocity);
                 
                 Debug.Log("Player " + PlayerNumber + " released ball with velocity: " + launchVelocity);
@@ -96,7 +130,7 @@ public class PlayerController : MonoBehaviour
             {
                 if (orb.GetComponentInChildren<Collider>().Raycast(ray, out hitData, 0.5f))
                 {
-                    lastBallPosition = orb.transform.position;
+                    lastOrbPosition = orb.transform.position;
                     BallGrabbed = true;
                     Debug.Log("Player " + PlayerNumber + " grabbed the ball.");
                 }
@@ -112,11 +146,26 @@ public class PlayerController : MonoBehaviour
         );
 
         orb.transform.position = pointerPositionToWorldPosition;
+        /*
+        launchVelocity = ((orb.transform.position.y - lastOrbPosition.y) * orb.transform.up +
+            (orb.transform.position.x - lastOrbPosition.x) * orb.transform.right) / Time.fixedDeltaTime;
+        */
 
-        launchVelocity = ((orb.transform.position.y - lastBallPosition.y) * orb.transform.up +
-            (orb.transform.position.x - lastBallPosition.x) * orb.transform.right) / Time.fixedDeltaTime;
+        if (DebugText != null)
+        {
+            DebugText.text = "Current position:\t\t\t\t" + orb.transform.position;
+            DebugText.text += "\nLast position:\t\t\t\t\t" + lastOrbPosition;
+            DebugText.text += "\nSecond-to-last position:\t" + secondToLastOrbPosition;
+            DebugText.text += "\nThird-to-last position:\t\t" + thirdToLastOrbPosition;
+            DebugText.text += "\nFourth-to-last position:\t" + fourthToLastOrbPosition;
+        }
 
-        lastBallPosition = orb.transform.position;
+        fourthToLastOrbPosition = thirdToLastOrbPosition;
+        thirdToLastOrbPosition = secondToLastOrbPosition;
+        secondToLastOrbPosition = lastOrbPosition;
+        lastOrbPosition = orb.transform.position;
+
+        
     }
 
     private void OnDisable() {

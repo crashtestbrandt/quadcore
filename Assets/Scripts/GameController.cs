@@ -11,6 +11,8 @@ public class GameController : MonoBehaviour
     public GameObject BallPrefab;
     public GameObject InfoUI;
 
+    public Text DebugText;
+
     GameObject[] players;
     int currentPlayer;
 
@@ -76,6 +78,7 @@ public class GameController : MonoBehaviour
             Debug.Log("Attempting to create player " + currentPlayer + " ...");
             players[currentPlayer-1] = Instantiate(PlayerPrefab, this.transform.position, Quaternion.identity);
             players[currentPlayer-1].GetComponent<PlayerController>().PlayerNumber = currentPlayer;
+            players[currentPlayer-1].GetComponent<PlayerController>().DebugText = (DebugText != null)? DebugText : null;
         }
 
         // Make sure this player is active, whether newly created or not
