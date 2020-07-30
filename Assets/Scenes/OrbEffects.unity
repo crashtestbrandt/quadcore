@@ -128,6 +128,10 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 1718746582, guid: 09e726ddb216d7347b57b758e4eb4cc8, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[1].m_MethodName
+      value: ClearBoard
+      objectReference: {fileID: 0}
     - target: {fileID: 1762836668332655697, guid: 09e726ddb216d7347b57b758e4eb4cc8,
         type: 3}
       propertyPath: m_LocalPosition.x

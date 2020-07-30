@@ -25,15 +25,7 @@ public class BoardController : MonoBehaviour
         if (board == null) board = new GameObject[6,7];
 
         CreateGrabbers();
-        /*
-        grabbers = new List<BallGrabber>();
-        for (int i = 0; i < NumColumns; i++)
-        {
-            grabbers.Add(Instantiate(CellPrefab, this.transform.position + (0.5f * CellWidth * this.transform.forward), Quaternion.identity, this.transform).GetComponent<BallGrabber>());
-            grabbers[i].Row = 0;
-            grabbers[i].Column = i;
-        }
-        */
+
         // Register callbacks
         BallGrabber.BallGrabbedByCell += OnGrabberTriggered;
         GameOver += OnGameOver;
@@ -223,9 +215,15 @@ public class BoardController : MonoBehaviour
         
     }
 
+    private void OnDestroy() {
+        BallGrabber.BallGrabbedByCell -= OnGrabberTriggered;
+        GameOver -= OnGameOver;
+    }
+/*
     public void OnNewGame()
     {
         ClearBoard();
         CreateGrabbers();
     }
+*/
 }

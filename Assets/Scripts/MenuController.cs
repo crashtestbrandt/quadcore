@@ -25,14 +25,14 @@ public class MenuController : MonoBehaviour
     public void OnHotseatSelect()
     {
         GameState.GameMode = GameController.GameModeType.LOCAL_MULTIPLAYER;
-        SceneManager.LoadScene(1);
+        SceneManager.LoadScene(1, LoadSceneMode.Single);
 
     }
 
     public void OnVsAISelect()
     {
         GameState.GameMode = GameController.GameModeType.LOCAL_AI;
-        SceneManager.LoadScene(1);
+        SceneManager.LoadScene(1, LoadSceneMode.Single);
     }
 
     public void OnOnlineSelect()

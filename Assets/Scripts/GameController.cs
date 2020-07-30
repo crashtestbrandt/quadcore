@@ -26,8 +26,8 @@ public class GameController : MonoBehaviour
     GameObject[] players;
     int currentPlayer;
 
-    public static bool Quitting { get; set; } = false;
-    public static bool GameOver { get; set; } = false;
+    public static bool Quitting { get; set; }
+    public static bool GameOver { get; set; }
 
     public float ResetDelaySeconds = 3.0f;
 
@@ -51,6 +51,8 @@ public class GameController : MonoBehaviour
 
     void StartNewGame()
     {
+        Quitting = false;
+        GameOver = false;
         InfoUI.SetActive(false);
         players = new GameObject[2];
         currentPlayer = UnityEngine.Random.Range(1,3);
@@ -154,6 +156,7 @@ public class GameController : MonoBehaviour
     {
         Debug.Log("New game requested!");
         GameOver = false;
+        
         if (!Quitting) StartNewGame();
     }
 
@@ -163,11 +166,16 @@ public class GameController : MonoBehaviour
             if (player != null) Destroy(player);
         }
         Quitting = true;
+        
         Destroy(this);
     }
 
     public void ReturnToMainMenu()
     {
+        FloorController.BallCollidedWithFloorEvent -= OnResetTurn;
+        BallController.ThrowTimer -= OnResetTurn;
+        BallGrabber.BallGrabbedByCell -= OnResetRequestedByBoard;
+        BoardController.GameOver -= OnGameOver;
         SceneManager.LoadScene(0, LoadSceneMode.Single);
     }
 
