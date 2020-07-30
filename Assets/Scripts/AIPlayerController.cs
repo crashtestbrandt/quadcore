@@ -52,21 +52,20 @@ public class AIPlayerController : MonoBehaviour, IPlayerController
         // Get target position
         Vector3 target = new Vector3(0.0f, 1.54f, 1.88f);
         target = target - orb.transform.position;
-
-        // Aim at target position
-        /*
-        Vector3 velocity = new Vector3(
-            target.x / Time.fixedDeltaTime,
-            (target.y + 0.5f * 9.8f * Mathf.Pow(Time.fixedDeltaTime, 2.0f)) / (Time.fixedDeltaTime * Mathf.Sin(0.125f*Mathf.PI)),
-            target.z / (Time.fixedDeltaTime * Mathf.Cos(0.125f * Mathf.PI))
-        );
-        */
         
-        Vector3 velocity = new Vector3(0.0f, 3.5f, 3.5f);
+        float[] skews = new float[7];
+        for (int i = 0; i < 7; i++)
+        {
+            skews[i] = 0.3f * ((float)i-3.0f);
+        }
+        Vector3 velocity = new Vector3(skews[UnityEngine.Random.Range(0,7)], 3.5f, 3.5f);
 
         orb.GetComponentInChildren<Collider>().gameObject.tag = "Player" + playerNumber.ToString();
         await Task.Delay(TimeSpan.FromSeconds(5.0f));
-        debugText.text += "\n\nOrb launching with velocity: " + velocity;
+        if (debugText != null)
+        {
+            debugText.text += "\n\nOrb launching with velocity: " + velocity;
+        }
         orb.GetComponent<BallController>().Launch(velocity);
     }
 
