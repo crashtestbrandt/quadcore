@@ -6,6 +6,9 @@ EditorBuildSettings:
   serializedVersion: 2
   m_Scenes:
   - enabled: 1
+    path: Assets/Scenes/Main Menu.unity
+    guid: 4bcfbac84b79fa5469dfa7016af0883d
+  - enabled: 1
     path: Assets/Scenes/OrbEffects.unity
     guid: 7c7eca379f1215043b6cb6726dfdf055
   m_configObjects: {}

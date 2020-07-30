@@ -4,6 +4,7 @@ using UnityEngine;
 using System.Threading.Tasks;
 using System;
 using UnityEngine.UI;
+using UnityEngine.SceneManagement;
 
 public class GameController : MonoBehaviour
 {
@@ -13,7 +14,7 @@ public class GameController : MonoBehaviour
         LOCAL_AI,
         NETWORK_MULTIPLAYER
     }
-    public GameModeType GameMode = GameModeType.LOCAL_MULTIPLAYER;
+    public GameModeType GameMode;
 
     public GameObject PlayerPrefab;
     public GameObject AIPlayerPrefab;
@@ -32,6 +33,7 @@ public class GameController : MonoBehaviour
 
     void Start()
     {
+        GameMode = GameState.GameMode;
         //InfoUI.SetActive(false);
 
         //players = new GameObject[2];
@@ -162,6 +164,11 @@ public class GameController : MonoBehaviour
         }
         Quitting = true;
         Destroy(this);
+    }
+
+    public void ReturnToMainMenu()
+    {
+        SceneManager.LoadScene(0, LoadSceneMode.Single);
     }
 
 }
