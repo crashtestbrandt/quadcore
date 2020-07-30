@@ -2,6 +2,8 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using System.Threading.Tasks;
+using System;
 
 public class AIPlayerController : MonoBehaviour, IPlayerController
 {
@@ -11,13 +13,12 @@ public class AIPlayerController : MonoBehaviour, IPlayerController
     GameObject ChosenOrbPrefab;
     public GameObject[] OrbPrefabs;
 
-    public Text DebugText { get; set; } = null;
-
     public float BallZOffset = 0.5f;
     public float BallYOffset = 1.3f;
     
 
     int playerNumber;
+    Text debugText = null;
 
     void Awake()
     {
@@ -27,12 +28,15 @@ public class AIPlayerController : MonoBehaviour, IPlayerController
 
     void FixedUpdate()
     {
-        
     }
 
-    public void StartTurn()
+    public async void StartTurn()
     {
         Debug.Log("AI player starting turn");
+        if (debugText != null)
+        {
+            debugText.text = "Turn: Player " + playerNumber + " (AI)";
+        }
         ChosenOrbPrefab = OrbPrefabs[playerNumber-1];
         orb = Instantiate(
             ChosenOrbPrefab,
@@ -50,13 +54,20 @@ public class AIPlayerController : MonoBehaviour, IPlayerController
         target = target - orb.transform.position;
 
         // Aim at target position
+        /*
         Vector3 velocity = new Vector3(
             target.x / Time.fixedDeltaTime,
             (target.y + 0.5f * 9.8f * Mathf.Pow(Time.fixedDeltaTime, 2.0f)) / (Time.fixedDeltaTime * Mathf.Sin(0.125f*Mathf.PI)),
             target.z / (Time.fixedDeltaTime * Mathf.Cos(0.125f * Mathf.PI))
         );
+        */
+        
+        Vector3 velocity = new Vector3(0.0f, 3.5f, 3.5f);
 
-        orb.GetComponentInChildren<BallController>().Launch(velocity);
+        orb.GetComponentInChildren<Collider>().gameObject.tag = "Player" + playerNumber.ToString();
+        await Task.Delay(TimeSpan.FromSeconds(5.0f));
+        debugText.text += "\n\nOrb launching with velocity: " + velocity;
+        orb.GetComponent<BallController>().Launch(velocity);
     }
 
     public void SetPlayerNumber(int num)
@@ -66,6 +77,11 @@ public class AIPlayerController : MonoBehaviour, IPlayerController
 
     private void OnDisable() {
         if (orb != null) Destroy(orb);
+    }
+
+    public void SetDebugTextObject(Text textObject)
+    {
+        debugText = textObject;
     }
 
 }

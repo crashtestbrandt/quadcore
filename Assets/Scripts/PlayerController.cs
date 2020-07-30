@@ -13,7 +13,7 @@ public class PlayerController : MonoBehaviour, IPlayerController
     GameObject ChosenOrbPrefab;
     public GameObject[] OrbPrefabs;
 
-    public Text DebugText { get; set; } = null;
+    Text debugText = null;
 
     public float BallZOffset = 0.5f;
     public float BallYOffset = 1.3f;
@@ -50,20 +50,15 @@ public class PlayerController : MonoBehaviour, IPlayerController
             ),
             Quaternion.AngleAxis(45.0f, transform.right)
         );
-
+        if (debugText != null)
+        {
+            debugText.text = "Turn: Player " + playerNumber;
+        }
         fourthToLastOrbPosition = orb.transform.position;
         thirdToLastOrbPosition = orb.transform.position;
         secondToLastOrbPosition = orb.transform.position;
         lastOrbPosition = orb.transform.position;
         
-        if (DebugText != null)
-        {
-            DebugText.text = "Current position:\t\t\t\t" + orb.transform.position;
-            DebugText.text += "\nLast position:\t\t\t\t\t" + lastOrbPosition;
-            DebugText.text += "\nSecond-to-last position:\t" + secondToLastOrbPosition;
-            DebugText.text += "\nThird-to-last position:\t\t" + thirdToLastOrbPosition;
-            DebugText.text += "\nFourth-to-last position:\t" + fourthToLastOrbPosition;
-        }
     }
 
     void FixedUpdate()
@@ -101,14 +96,9 @@ public class PlayerController : MonoBehaviour, IPlayerController
                     }
                 }
 
-                if (DebugText != null)
+                if (debugText != null)
                 {
-                    DebugText.text = "Current position:\t\t\t\t" + orb.transform.position;
-                    DebugText.text += "\nLast position:\t\t\t\t\t" + lastOrbPosition;
-                    DebugText.text += "\nSecond-to-last position:\t" + secondToLastOrbPosition;
-                    DebugText.text += "\nThird-to-last position:\t\t" + thirdToLastOrbPosition;
-                    DebugText.text += "\nFourth-to-last position:\t" + fourthToLastOrbPosition;
-                    DebugText.text += "\n\nBall launching with velocity: " + launchVelocity;
+                    debugText.text += "\n\nOrb launching with velocity: " + launchVelocity;
                 }
                 
                 orb.GetComponentInChildren<Collider>().gameObject.tag = "Player" + playerNumber.ToString();
@@ -145,15 +135,6 @@ public class PlayerController : MonoBehaviour, IPlayerController
             (orb.transform.position.x - lastOrbPosition.x) * orb.transform.right) / Time.fixedDeltaTime;
         */
 
-        if (DebugText != null)
-        {
-            DebugText.text = "Current position:\t\t\t\t" + orb.transform.position;
-            DebugText.text += "\nLast position:\t\t\t\t\t" + lastOrbPosition;
-            DebugText.text += "\nSecond-to-last position:\t" + secondToLastOrbPosition;
-            DebugText.text += "\nThird-to-last position:\t\t" + thirdToLastOrbPosition;
-            DebugText.text += "\nFourth-to-last position:\t" + fourthToLastOrbPosition;
-        }
-
         fourthToLastOrbPosition = thirdToLastOrbPosition;
         thirdToLastOrbPosition = secondToLastOrbPosition;
         secondToLastOrbPosition = lastOrbPosition;
@@ -170,10 +151,16 @@ public class PlayerController : MonoBehaviour, IPlayerController
     {
         playerNumber = num;
     }
+
+    public void SetDebugTextObject(Text textObject)
+    {
+        debugText = textObject;
+    }
 }
 
 public interface IPlayerController
 {
+    void SetDebugTextObject(Text textObject);
     void SetPlayerNumber(int num);
     void StartTurn();
 }

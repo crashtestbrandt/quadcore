@@ -29,6 +29,7 @@ public class BallController : MonoBehaviour
 
     public async void Launch(Vector3 velocity)
     {
+        Debug.Log("Orb launching with velocity: " + velocity);
         rb.isKinematic = false;
         rb.velocity = velocity;
         await Task.Delay(TimeSpan.FromSeconds(ThrowTimerSeconds));

@@ -2122,7 +2122,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b69723924550bc548b7d03dbbd4f0e74, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  GameMode: 0
   PlayerPrefab: {fileID: 5787437736383317448, guid: c2eeaa87958b27e4da2c449437f97986,
+    type: 3}
+  AIPlayerPrefab: {fileID: 4216462943911331701, guid: 57ab0de7eb0eeb547ac69cbc7cc07eca,
     type: 3}
   BallPrefab: {fileID: 2806365362016205154, guid: 7963b04cbe7dea9458b9d8d429212096,
     type: 3}
