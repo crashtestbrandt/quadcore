@@ -36,8 +36,16 @@ public class GameController : MonoBehaviour
 
     void Start()
     {
-        if (AllowGameModeOverride) gameMode = (AllowGameModeOverride? GameModeOverride : GameState.GameMode);
+        if (AllowGameModeOverride)
+        {
+            gameMode = GameModeOverride;
+        }
+        else
+        {
+            gameMode = GameState.GameMode;
+        }
 
+        Debug.Log("Starting game in mode: " + gameMode);
         // Register callbacks
         FloorController.BallCollidedWithFloorEvent += OnResetTurn;
         BallController.ThrowTimer += OnResetTurn;
