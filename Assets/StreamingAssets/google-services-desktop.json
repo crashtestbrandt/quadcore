@@ -1,0 +1,37 @@
+{
+  "client": [
+    {
+      "services": {
+        "appinvite_service": {
+          "status": 1
+        }, 
+        "analytics_service": {
+          "status": 0
+        }
+      }, 
+      "oauth_client": [
+        {
+          "client_id": "750018955110-7k669ra0ke9dtolqr3srfjgo6g4gbrr7.apps.googleusercontent.com"
+        }
+      ], 
+      "api_key": [
+        {
+          "current_key": "AIzaSyAueOlPjCr4SFGHDT6C-pYLJyMsRimbPXE"
+        }
+      ], 
+      "client_info": {
+        "mobilesdk_app_id": "1:750018955110:ios:921c5297c9627e0e2eaaa7", 
+        "android_client_info": {
+          "package_name": "com.crashteststudios.quadcore"
+        }
+      }
+    }
+  ], 
+  "configuration_version": "1", 
+  "project_info": {
+    "storage_bucket": "quadcore-594a5.appspot.com", 
+    "project_id": "quadcore-594a5", 
+    "firebase_url": "https://quadcore-594a5.firebaseio.com", 
+    "project_number": "750018955110"
+  }
+}
