@@ -193,6 +193,13 @@ public class BoardController : MonoBehaviour
 
     public void ClearBoard()
     {
+        if (grabbers != null)
+        {
+            foreach (BallGrabber grabber in grabbers)
+            {
+                GameObject.Destroy(grabber.gameObject);
+            }
+        }
         if (board != null)
         {
             for (int i = 0; i < NumRows; i++)
@@ -219,11 +226,10 @@ public class BoardController : MonoBehaviour
         BallGrabber.BallGrabbedByCell -= OnGrabberTriggered;
         GameOver -= OnGameOver;
     }
-/*
+
     public void OnNewGame()
     {
         ClearBoard();
         CreateGrabbers();
     }
-*/
 }

@@ -25,6 +25,10 @@ public class GameController : MonoBehaviour
     public GameObject InfoUI;
 
     public Text DebugText;
+    public Text DebugLabel;
+    public Slider DebugSlider;
+
+    public static float YSpeedFactor = 1.0f;
 
     GameObject[] players;
     int currentPlayer;
@@ -51,6 +55,15 @@ public class GameController : MonoBehaviour
         BallController.ThrowTimer += OnResetTurn;
         BallGrabber.BallGrabbedByCell += OnResetRequestedByBoard;
         BoardController.GameOver += OnGameOver;
+        if (DebugSlider)
+        {
+            YSpeedFactor = DebugSlider.value / 10.0f;
+            if (DebugLabel)
+            {
+                DebugLabel.text = YSpeedFactor.ToString();
+            }
+            DebugSlider.onValueChanged.AddListener(delegate {OnSetDebugVelocity();});
+        }
 
         //OnResetTurn();
         StartNewGame();
@@ -179,5 +192,21 @@ public class GameController : MonoBehaviour
         BoardController.GameOver -= OnGameOver;
         SceneManager.LoadScene(0, LoadSceneMode.Single);
     }
+
+    public void OnSetDebugVelocity()
+    {
+        DebugSlider.onValueChanged.RemoveAllListeners();
+        if (DebugSlider != null)
+        {
+            YSpeedFactor = DebugSlider.value / 10.0f;
+            
+        }
+        if (DebugLabel != null)
+        {
+            DebugLabel.text = YSpeedFactor.ToString();
+        }
+        DebugSlider.onValueChanged.AddListener(delegate {OnSetDebugVelocity();});
+    }
+    
 
 }

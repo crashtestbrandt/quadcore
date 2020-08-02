@@ -134,7 +134,6 @@ PlayerSettings:
   - {fileID: 0}
   - {fileID: 0}
   - {fileID: 0}
-  - {fileID: 0}
   metroInputSource: 0
   wsaTransparentSwapchain: 0
   m_HolographicPauseOnTrackingLoss: 1
@@ -180,7 +179,7 @@ PlayerSettings:
     Android: com.crashteststudios.quadcore
     iPhone: com.crashteststudios.quadcore
   buildNumber:
-    iPhone: 5
+    iPhone: 6
   AndroidBundleVersionCode: 4
   AndroidMinSdkVersion: 19
   AndroidTargetSdkVersion: 0

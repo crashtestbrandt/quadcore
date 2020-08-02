@@ -17,7 +17,7 @@ public class PlayerController : MonoBehaviour, IPlayerController
 
     public float BallZOffset = 0.5f;
     public float BallYOffset = 1.3f;
-    public float YSpeedFactor = 1.0f;
+    //public float YSpeedFactor = 1.0f;
     public float XSpeedFactor = 0.5f;
     public float MaxSpeed = 30.0f;
 
@@ -105,7 +105,7 @@ public class PlayerController : MonoBehaviour, IPlayerController
                 Vector3 launchDirection = new Vector3(launch2D.x - 0.5f * screenDiagonal.x, 0.71f * launch2D.y,  0.71f * launch2D.y).normalized;
                 Vector3 launchVelocity = screenPortionPerFrame * MaxSpeed * launchDirection;
                 launchVelocity.x = launchVelocity.x * XSpeedFactor;
-                launchVelocity.y = launchVelocity.y * YSpeedFactor;
+                launchVelocity.y = launchVelocity.y * GameController.YSpeedFactor;
                 if (debugText != null)
                 {
                     debugText.text += "\n\nOrb launching with velocity: " + launchVelocity;
