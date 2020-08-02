@@ -24,7 +24,8 @@ public class NetworkController : MonoBehaviour
 
         Debug.Log("Signing in anonymously ...");
         FirebaseAuth auth = FirebaseAuth.DefaultInstance;
-        await auth.SignInAnonymouslyAsync();
+        user = await auth.SignInAnonymouslyAsync();
+
         /*.ContinueWith(async task =>
         {
             await Task.Delay(TimeSpan.FromSeconds(5.0f));
@@ -51,12 +52,9 @@ public class NetworkController : MonoBehaviour
         functions = FirebaseFunctions.DefaultInstance;
 
         var data = new Dictionary<string, object>();
-        //data["text"] = "This is a fucking test.";
         data["firstNumber"] = 5;
         data["secondNumber"] = 10;
-        //data["push"] = true;
 
-        //var function = functions.GetHttpsCallable("addMessage");
         var function = functions.GetHttpsCallable("addNumbers");
         dynamic result = await function.CallAsync(data);
         //var keys = result.Data.Keys;
