@@ -25,7 +25,8 @@ public class GameController : MonoBehaviour
     public GameObject InfoUI;
 
     public Text DebugText;
-    public Text DebugLabel;
+    public Text DebugLabel1;
+    public Text DebugLabel2;
     public Slider DebugSlider;
 
     public static float YSpeedFactor = 1.0f;
@@ -58,9 +59,9 @@ public class GameController : MonoBehaviour
         if (DebugSlider)
         {
             YSpeedFactor = DebugSlider.value / 10.0f;
-            if (DebugLabel)
+            if (DebugLabel1)
             {
-                DebugLabel.text = YSpeedFactor.ToString();
+                DebugLabel1.text = YSpeedFactor.ToString();
             }
             DebugSlider.onValueChanged.AddListener(delegate {OnSetDebugVelocity();});
         }
@@ -74,6 +75,7 @@ public class GameController : MonoBehaviour
         Quitting = false;
         GameOver = false;
         InfoUI.SetActive(false);
+
         players = new GameObject[2];
         currentPlayer = UnityEngine.Random.Range(1,3);
         OnResetTurn();
@@ -201,9 +203,9 @@ public class GameController : MonoBehaviour
             YSpeedFactor = DebugSlider.value / 10.0f;
             
         }
-        if (DebugLabel != null)
+        if (DebugLabel1 != null)
         {
-            DebugLabel.text = YSpeedFactor.ToString();
+            DebugLabel1.text = YSpeedFactor.ToString();
         }
         DebugSlider.onValueChanged.AddListener(delegate {OnSetDebugVelocity();});
     }
