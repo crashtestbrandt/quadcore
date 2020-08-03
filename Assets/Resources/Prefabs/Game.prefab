@@ -2475,7 +2475,7 @@ MonoBehaviour:
   BallPrefab: {fileID: 2806365362016205154, guid: 7963b04cbe7dea9458b9d8d429212096,
     type: 3}
   InfoUI: {fileID: 1762836667800595471}
-  DebugText: {fileID: 0}
+  DebugText: {fileID: 8873745707380930679}
   DebugLabel1: {fileID: 707786440}
   DebugLabel2: {fileID: 847443950}
   DebugSlider: {fileID: 2488778571073814197}

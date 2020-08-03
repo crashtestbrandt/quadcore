@@ -6,6 +6,7 @@ using UnityEngine.UI;
 
 public class PlayerController : MonoBehaviour, IPlayerController
 {
+    const float INCHES_TO_METERS = 39.4f;
     Camera mainCamera;
     bool BallGrabbed = false;
 
@@ -17,18 +18,8 @@ public class PlayerController : MonoBehaviour, IPlayerController
 
     public float BallZOffset = 0.5f;
     public float BallYOffset = 1.3f;
-    //public float YSpeedFactor = 1.0f;
-    public float XSpeedFactor = 0.5f;
-    public float MaxSpeed = 30.0f;
 
-
-    Vector3 screenDiagonal;
-    Vector3 screenDiagonalMaxInWorld;
-    Vector3 screenDiagonalMinInWorld;
-   // Vector2 pixelsPerUnit;
-   float pixelsPerUnit;
-   float screenPortionPerFrame = 0.0f;
-
+    float dpi;
     
     
     Ray ray;
@@ -39,34 +30,14 @@ public class PlayerController : MonoBehaviour, IPlayerController
 
     void Awake()
     {
+        dpi = Screen.dpi;
+        Debug.Log("Screen DPI: " + dpi);
         screenPositionBuffer = new List<Vector2>();
-        Debug.Log("Created a player.");
         mainCamera = Camera.main;
-        screenDiagonal = new Vector3(Screen.width, Screen.height, mainCamera.nearClipPlane + BallZOffset);
-        screenDiagonalMaxInWorld = mainCamera.ScreenToWorldPoint(screenDiagonal);
-        screenDiagonalMinInWorld = mainCamera.ScreenToWorldPoint(
-            new Vector3(0.0f, 0.0f, mainCamera.nearClipPlane + BallZOffset)
-        );
-        /*
-        pixelsPerUnit = new Vector2(
-            screenDiagonal.x / (screenDiagonalMaxInWorld.x - screenDiagonalMinInWorld.x),
-            screenDiagonal.y  / (screenDiagonalMaxInWorld.y - screenDiagonalMinInWorld.y)
-            );
-        */
-        pixelsPerUnit = screenDiagonal.x / (screenDiagonalMaxInWorld.x - screenDiagonalMinInWorld.x);
     }
 
     public void StartTurn()
     {
-        if (debugText != null)
-        {
-            debugText.text = "Screen diagonal (pixels): " + screenDiagonal + "\n";
-            debugText.text += "Screen diagonal (world, max): " + screenDiagonalMaxInWorld + "\n";
-            debugText.text += "Screen diagonal (world, min): " + screenDiagonalMinInWorld + "\n";
-            debugText.text += "Pixels per unit: " + pixelsPerUnit + "\n";
-
-        }
-        Debug.Log("Player starting turn");
         ChosenOrbPrefab = OrbPrefabs[playerNumber-1];
         orb = Instantiate(
             ChosenOrbPrefab,
@@ -96,16 +67,21 @@ public class PlayerController : MonoBehaviour, IPlayerController
             {
                 BallGrabbed = false;
 
-                Vector2 sum = Vector2.zero;
-                foreach (Vector2 vel in screenPositionBuffer)
+                float sumXm = 0.0f;
+                float sumYm = 0.0f;
+                for (int i = 1; i < screenPositionBuffer.Count; i++)
                 {
-                    sum += vel;
+                    sumXm += (screenPositionBuffer[i].x - screenPositionBuffer[i-1].x) / dpi;
+                    sumYm += (screenPositionBuffer[i].y - screenPositionBuffer[i-1].y) / dpi;
                 }
-                Vector2 launch2D = sum / screenPositionBuffer.Count;
-                Vector3 launchDirection = new Vector3(launch2D.x - 0.5f * screenDiagonal.x, 0.71f * launch2D.y,  0.71f * launch2D.y).normalized;
-                Vector3 launchVelocity = screenPortionPerFrame * MaxSpeed * launchDirection;
-                launchVelocity.x = launchVelocity.x * XSpeedFactor;
-                launchVelocity.y = launchVelocity.y * GameController.YSpeedFactor;
+                float avgXmps = (sumXm / (float)(screenPositionBuffer.Count)) * (1.0f / Time.fixedDeltaTime) * (1.0f / INCHES_TO_METERS);
+                float avgYmps = (sumYm / (float)(screenPositionBuffer.Count)) * (1.0f / Time.fixedDeltaTime) * (1.0f / INCHES_TO_METERS);
+                Vector3 launchVelocity = new Vector3(
+                    avgXmps,
+                    avgYmps,
+                    avgYmps
+                    );
+                launchVelocity = GameController.SpeedFactor * launchVelocity;
                 if (debugText != null)
                 {
                     debugText.text += "\n\nOrb launching with velocity: " + launchVelocity;
@@ -136,15 +112,17 @@ public class PlayerController : MonoBehaviour, IPlayerController
     {   
         if (screenPositionBuffer.Count == 4) screenPositionBuffer.RemoveAt(0);
         screenPositionBuffer.Add(Pointer.current.position.ReadValue());
-        float sum = 0.0f;
+        /*
+        float sumXm = 0.0f;
+        float sumYm = 0.0f;
         for (int i = 1; i < screenPositionBuffer.Count; i++)
         {
-            sum += ((screenPositionBuffer[i] - screenPositionBuffer[i-1])).magnitude;
+            sumXm += (screenPositionBuffer[i].x - screenPositionBuffer[i-1].x) / dpi;
+            sumYm += (screenPositionBuffer[i].y - screenPositionBuffer[i-1].y) / dpi;
         }
-        float avg = sum / (float)(screenPositionBuffer.Count - 1);
-        screenPortionPerFrame = avg / screenDiagonal.magnitude;
-
-
+        float avgXm = (sumXm / (float)(screenPositionBuffer.Count)) * (1.0f / Time.fixedDeltaTime) * (1.0f / INCHES_TO_METERS);
+        float avgYm = (sumYm / (float)(screenPositionBuffer.Count)) * (1.0f / Time.fixedDeltaTime) * (1.0f / INCHES_TO_METERS);
+        */
         orb.transform.position = mainCamera.ScreenToWorldPoint(
             new Vector3(
                 screenPositionBuffer[screenPositionBuffer.Count-1].x,
@@ -152,17 +130,14 @@ public class PlayerController : MonoBehaviour, IPlayerController
                 mainCamera.nearClipPlane + BallZOffset
             )
         );
-        
+        /*
         if (debugText != null)
         {
-            debugText.text = "Screen diagonal (pixels): " + screenDiagonal + "\n";
-            debugText.text += "Screen diagonal (world, max): " + screenDiagonalMaxInWorld + "\n";
-            debugText.text += "Screen diagonal (world, min): " + screenDiagonalMinInWorld + "\n";
-            debugText.text += "Pixels per unit: " + pixelsPerUnit + "\n";
-            debugText.text += "Pointer position (pixels): " + screenPositionBuffer[screenPositionBuffer.Count-1] + "\n";
-            debugText.text += "Orb position (world):  " + orb.transform.position + "\n";
-            debugText.text += "Avg. portion of screen per frame: " + screenPortionPerFrame + "\n";
-        }   
+            debugText.text = "Pointer position (pixels): " + screenPositionBuffer[screenPositionBuffer.Count-1] + "\n";
+            debugText.text += "x m/s: " + avgXm + "\n";
+            debugText.text += "y m/s: " + avgYm + "\n";
+        }
+        */
     }
 
     private void OnDisable() {

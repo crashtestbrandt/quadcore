@@ -179,7 +179,7 @@ PlayerSettings:
     Android: com.crashteststudios.quadcore
     iPhone: com.crashteststudios.quadcore
   buildNumber:
-    iPhone: 6
+    iPhone: 8
   AndroidBundleVersionCode: 4
   AndroidMinSdkVersion: 19
   AndroidTargetSdkVersion: 0

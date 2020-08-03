@@ -29,7 +29,7 @@ public class GameController : MonoBehaviour
     public Text DebugLabel2;
     public Slider DebugSlider;
 
-    public static float YSpeedFactor = 1.0f;
+    public static float SpeedFactor { get; set; } = 4.0f;
 
     GameObject[] players;
     int currentPlayer;
@@ -58,10 +58,10 @@ public class GameController : MonoBehaviour
         BoardController.GameOver += OnGameOver;
         if (DebugSlider)
         {
-            YSpeedFactor = DebugSlider.value / 10.0f;
+            SpeedFactor = DebugSlider.value / 10.0f;
             if (DebugLabel1)
             {
-                DebugLabel1.text = YSpeedFactor.ToString();
+                DebugLabel1.text = SpeedFactor.ToString();
             }
             DebugSlider.onValueChanged.AddListener(delegate {OnSetDebugVelocity();});
         }
@@ -200,12 +200,12 @@ public class GameController : MonoBehaviour
         DebugSlider.onValueChanged.RemoveAllListeners();
         if (DebugSlider != null)
         {
-            YSpeedFactor = DebugSlider.value / 10.0f;
+            SpeedFactor = DebugSlider.value / 10.0f;
             
         }
         if (DebugLabel1 != null)
         {
-            DebugLabel1.text = YSpeedFactor.ToString();
+            DebugLabel1.text = SpeedFactor.ToString();
         }
         DebugSlider.onValueChanged.AddListener(delegate {OnSetDebugVelocity();});
     }
