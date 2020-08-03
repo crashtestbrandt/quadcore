@@ -25,28 +25,8 @@ public class NetworkController : MonoBehaviour
         Debug.Log("Signing in anonymously ...");
         FirebaseAuth auth = FirebaseAuth.DefaultInstance;
         user = await auth.SignInAnonymouslyAsync();
-
-        /*.ContinueWith(async task =>
-        {
-            await Task.Delay(TimeSpan.FromSeconds(5.0f));
-            if (task.IsCanceled)
-            {
-                Debug.LogError("SignInAnonymouslyAsync was canceled.");
-                return;
-            }
-            if (task.IsFaulted)
-            {
-                Debug.LogError("SignInAnonymouslyAsync encountered an error: " + task.Exception);
-                return;
-            }
-            
-            user = task.Result;
-            Debug.LogFormat("User signed in successfully: {0} ({1})",
-                user.DisplayName,
-                user.UserId
-                );
-        });
-        */
+        /*
+        // Without this delay, cloud function gets called before dependencies are in place
         await Task.Delay(TimeSpan.FromSeconds(5.0f));
         Debug.Log("Attempting to call cloud function ...");
         functions = FirebaseFunctions.DefaultInstance;
@@ -66,23 +46,10 @@ public class NetworkController : MonoBehaviour
         result = await function.CallAsync(data);
         Debug.Log("Write result: " + result.Data["writeResult"]);
         Debug.Log("Original: " + result.Data["original"]);
+        */
 
     }
-/*
-    private Task<string> addMessage(string text)
-    {
-        var data = new Dictionary<string, object>();
-        data["text"] = text;
-        data["push"] = true;
 
-        var function = functions.GetHttpsCallable("addMessage");
-        return function.CallAsync(data).ContinueWith((task) =>
-        {
-            return (string) task.Result.Data;
-        }
-        );
-    }
-    */
     // Update is called once per frame
     void Update()
     {
