@@ -2,6 +2,8 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using UnityEngine.UI;
+using System;
 
 public static class GameState
 {
@@ -11,15 +13,16 @@ public class MenuController : MonoBehaviour
 {
     public Canvas MainMenu;
     public Canvas OnlineMenu;
+    public Canvas CreateMenu;
+    public Canvas JoinMenu;
+
+    public Text MatchIDText;
 
     Canvas back = null;
     Canvas current = null;
 
     private void Start() {
-        current = MainMenu;
-
-        OnlineMenu.gameObject.SetActive(false);
-        MainMenu.gameObject.SetActive(true);
+        UpdateMenuCanvasTo(MainMenu);
     }
 
     public void OnHotseatSelect()
@@ -37,11 +40,37 @@ public class MenuController : MonoBehaviour
 
     public void OnOnlineSelect()
     {
+        GameState.GameMode = GameController.GameModeType.NETWORK_MULTIPLAYER;
+        UpdateMenuCanvasTo(OnlineMenu);
+    }
 
-        MainMenu.gameObject.SetActive(false);
-        OnlineMenu.gameObject.SetActive(true);
-        current = OnlineMenu;
-        back = MainMenu;
+    public void OnJoinSelect()
+    {
+        UpdateMenuCanvasTo(JoinMenu);
+    }
+
+    public void OnJoinConfirm()
+    {
+
+    }
+
+    public void OnCreateSelect()
+    {
+        UpdateMenuCanvasTo(CreateMenu);
+    }
+
+    public void OnCreateConfirm()
+    {
+
+    }
+
+    public void OnCopyMatchID()
+    {
+        TextEditor matchID = new TextEditor();
+        matchID.text = Guid.NewGuid().ToString();
+        matchID.SelectAll();
+        matchID.Copy();
+        MatchIDText.text = "Match ID copied!";
     }
 
     public void OnBackSelected()
@@ -54,5 +83,15 @@ public class MenuController : MonoBehaviour
             back = current;
             current = temp;
         }
+    }
+
+    private void UpdateMenuCanvasTo(Canvas canvas)
+    {
+        back = current ?? null;
+        current = canvas;
+
+        back?.gameObject.SetActive(false);
+        current.gameObject.SetActive(true);
+
     }
 }

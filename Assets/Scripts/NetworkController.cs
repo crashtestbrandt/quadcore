@@ -9,10 +9,11 @@ using System.Threading;
 using System.Threading.Tasks;
 using System;
 
-public class NetworkController : MonoBehaviour
+public class NetworkController : Singleton<NetworkController>
 {
-    public static FirebaseUser user;
-    public static FirebaseFunctions functions;
+    public static FirebaseUser User { get; private set; }
+    public static FirebaseFunctions NetworkFunctions { get; private set; }
+
 
     // Start is called before the first frame update
     async void Start()
@@ -24,35 +25,30 @@ public class NetworkController : MonoBehaviour
 
         Debug.Log("Signing in anonymously ...");
         FirebaseAuth auth = FirebaseAuth.DefaultInstance;
-        user = await auth.SignInAnonymouslyAsync();
-        /*
+        User = await auth.SignInAnonymouslyAsync();
+
         // Without this delay, cloud function gets called before dependencies are in place
         await Task.Delay(TimeSpan.FromSeconds(5.0f));
         Debug.Log("Attempting to call cloud function ...");
-        functions = FirebaseFunctions.DefaultInstance;
+        NetworkFunctions = FirebaseFunctions.DefaultInstance;
 
+        /*
         var data = new Dictionary<string, object>();
         data["firstNumber"] = 5;
         data["secondNumber"] = 10;
 
-        var function = functions.GetHttpsCallable("addNumbers");
+        var function = NetworkFunctions.GetHttpsCallable("addNumbers");
         dynamic result = await function.CallAsync(data);
         //var keys = result.Data.Keys;
         Debug.Log("Operation result: " + result.Data["operationResult"]);
 
         data = new Dictionary<string, object>();
         data["text"] = "This is a test message while authenticated!";
-        function = functions.GetHttpsCallable("addMessage");
+        function = NetworkFunctions.GetHttpsCallable("addMessage");
         result = await function.CallAsync(data);
         Debug.Log("Write result: " + result.Data["writeResult"]);
         Debug.Log("Original: " + result.Data["original"]);
         */
 
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        
     }
 }
