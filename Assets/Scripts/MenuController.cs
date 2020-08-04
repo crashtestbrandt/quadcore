@@ -44,7 +44,7 @@ public class MenuController : MonoBehaviour
     public async void OnCreateConfirm()
     {
         GameState.GameMode = GameController.GameModeType.NETWORK_MULTIPLAYER;
-        await NetworkController.CreateNewMatchAsync();
+        //await NetworkController.CreateNewMatchAsync();
         SceneManager.LoadScene(1, LoadSceneMode.Single);
     }
 
@@ -54,7 +54,7 @@ public class MenuController : MonoBehaviour
         matchID.text = NetworkController.MatchID;
         matchID.SelectAll();
         matchID.Copy();
-        textObject.text = "Match ID copied!";
+        textObject.text = "\tMatch ID copied!\t";
     }
 
     public void UpdateMenuCanvasTo(Canvas canvas)

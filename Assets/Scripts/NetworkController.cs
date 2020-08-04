@@ -5,15 +5,20 @@ using Firebase;
 using Firebase.Analytics;
 using Firebase.Auth;
 using Firebase.Functions;
+using Firebase.Database;
+using Firebase.Unity.Editor;
 using System.Threading;
 using System.Threading.Tasks;
 using System;
 
 public class NetworkController : Singleton<NetworkController>
 {
+    public static FirebaseAuth Auth { get; private set; }
     public static FirebaseUser User { get; private set; }
     public static FirebaseFunctions NetworkFunctions { get; private set; }
+    public static DatabaseReference DB { get; private set; }
     public static string MatchID { get; set; }
+    public static string UserID { get; set; }
 
 
     // Start is called before the first frame update
@@ -33,12 +38,16 @@ public class NetworkController : Singleton<NetworkController>
         FirebaseAnalytics.SetAnalyticsCollectionEnabled(true);
 
         Debug.Log("Signing in anonymously ...");
-        FirebaseAuth auth = FirebaseAuth.DefaultInstance;
-        User = await auth.SignInAnonymouslyAsync();
+        Auth = FirebaseAuth.DefaultInstance;
+        User = await Auth.SignInAnonymouslyAsync();
 
         // Without this delay, cloud function gets called before dependencies are in place
         await Task.Delay(TimeSpan.FromSeconds(5.0f));
-        NetworkFunctions = FirebaseFunctions.DefaultInstance;
+        //NetworkFunctions = FirebaseFunctions.DefaultInstance;
+        FirebaseApp.DefaultInstance.SetEditorDatabaseUrl("https://quadcore-594a5.firebaseio.com/");
+        DB = FirebaseDatabase.DefaultInstance.RootReference;
+        AddUser("TestUser");
+        
 
         /*
         var data = new Dictionary<string, object>();
@@ -80,5 +89,28 @@ public class NetworkController : Singleton<NetworkController>
         */
         dynamic result = await function.CallAsync(data);
         Debug.Log("Write result: " + result?.Data["result"]);
+    }
+
+    private void AddUser(string name) {
+
+        User user = new User(NetworkController.User.UserId, name);
+        string json = JsonUtility.ToJson(user);
+
+        DB.Child("users").Child(NetworkController.User.UserId).SetRawJsonValueAsync(json);
+        Debug.Log("Added user: " + name);
+    }
+
+}
+
+public class User
+{
+    string uid;
+    string name;
+    public User() {
+    }
+
+    public User(string id, string name) {
+        this.uid = id;
+        this.name = name;
     }
 }

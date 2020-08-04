@@ -26,13 +26,17 @@ public class PlayerController : MonoBehaviour, IPlayerController
 
     int playerNumber;
 
-    List<Vector2> screenPositionBuffer;
+    Vector2 lastDotPos;
+    float lastDotTime;
+    List<Vector2> dotVelocityBuffer;
 
     void Awake()
     {
         dpi = Screen.dpi;
+        lastDotPos = Vector2.zero;
+        lastDotTime = Time.time;
         Debug.Log("Screen DPI: " + dpi);
-        screenPositionBuffer = new List<Vector2>();
+        dotVelocityBuffer = new List<Vector2>();
         mainCamera = Camera.main;
     }
 
@@ -53,6 +57,7 @@ public class PlayerController : MonoBehaviour, IPlayerController
             ),
             Quaternion.AngleAxis(45.0f, transform.right)
         );
+
         
     }
 
@@ -72,15 +77,15 @@ public class PlayerController : MonoBehaviour, IPlayerController
             {
                 BallGrabbed = false;
 
-                float sumXm = 0.0f;
-                float sumYm = 0.0f;
-                for (int i = 1; i < screenPositionBuffer.Count; i++)
+                float sumXmps = 0.0f;
+                float sumYmps = 0.0f;
+                for (int i = 1; i < dotVelocityBuffer.Count; i++)
                 {
-                    sumXm += (screenPositionBuffer[i].x - screenPositionBuffer[i-1].x) / dpi;
-                    sumYm += (screenPositionBuffer[i].y - screenPositionBuffer[i-1].y) / dpi;
+                    sumXmps += dotVelocityBuffer[i].x / (dpi * INCHES_TO_METERS);
+                    sumYmps += dotVelocityBuffer[i].y / (dpi * INCHES_TO_METERS);
                 }
-                float avgXmps = (sumXm / (float)(screenPositionBuffer.Count)) * (1.0f / Time.fixedDeltaTime) * (1.0f / INCHES_TO_METERS);
-                float avgYmps = (sumYm / (float)(screenPositionBuffer.Count)) * (1.0f / Time.fixedDeltaTime) * (1.0f / INCHES_TO_METERS);
+                float avgXmps = (sumXmps / (float)(dotVelocityBuffer.Count));
+                float avgYmps = (sumYmps / (float)(dotVelocityBuffer.Count));
                 Vector3 launchVelocity = new Vector3(
                     avgXmps,
                     avgYmps,
@@ -108,6 +113,8 @@ public class PlayerController : MonoBehaviour, IPlayerController
                     //lastOrbPosition = orb.transform.position;
                     BallGrabbed = true;
                     Debug.Log("Player " + playerNumber + " grabbed the ball.");
+                    lastDotPos = Pointer.current.position.ReadValue();
+                    lastDotTime = Time.time;
                 }
             }
         }
@@ -115,34 +122,26 @@ public class PlayerController : MonoBehaviour, IPlayerController
 
     void WhileBallGrabbed()
     {   
-        if (screenPositionBuffer.Count == 4) screenPositionBuffer.RemoveAt(0);
-        screenPositionBuffer.Add(Pointer.current.position.ReadValue());
-        /*
-        float sumXm = 0.0f;
-        float sumYm = 0.0f;
-        for (int i = 1; i < screenPositionBuffer.Count; i++)
-        {
-            sumXm += (screenPositionBuffer[i].x - screenPositionBuffer[i-1].x) / dpi;
-            sumYm += (screenPositionBuffer[i].y - screenPositionBuffer[i-1].y) / dpi;
-        }
-        float avgXm = (sumXm / (float)(screenPositionBuffer.Count)) * (1.0f / Time.fixedDeltaTime) * (1.0f / INCHES_TO_METERS);
-        float avgYm = (sumYm / (float)(screenPositionBuffer.Count)) * (1.0f / Time.fixedDeltaTime) * (1.0f / INCHES_TO_METERS);
-        */
+        Vector2 thisDotPos = Pointer.current.position.ReadValue();
+        float thisDotTime = Time.time;
+        float dt = thisDotTime - lastDotTime;
+        if (dotVelocityBuffer.Count == 4) dotVelocityBuffer.RemoveAt(0);
+        dotVelocityBuffer.Add(
+            new Vector2(
+                (thisDotPos.x - lastDotPos.x) / dt, (thisDotPos.y - lastDotPos.y) / dt
+                )
+            );
         orb.transform.position = mainCamera.ScreenToWorldPoint(
             new Vector3(
-                screenPositionBuffer[screenPositionBuffer.Count-1].x,
-                screenPositionBuffer[screenPositionBuffer.Count-1].y,
+                thisDotPos.x,
+                thisDotPos.y,
                 mainCamera.nearClipPlane + BallZOffset
             )
         );
-        /*
-        if (debugText != null)
-        {
-            debugText.text = "Pointer position (pixels): " + screenPositionBuffer[screenPositionBuffer.Count-1] + "\n";
-            debugText.text += "x m/s: " + avgXm + "\n";
-            debugText.text += "y m/s: " + avgYm + "\n";
-        }
-        */
+
+        lastDotPos = thisDotPos;
+        lastDotTime = thisDotTime;
+
     }
 
     private void OnDisable() {
