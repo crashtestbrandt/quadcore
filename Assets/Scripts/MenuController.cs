@@ -4,6 +4,8 @@ using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 using System;
+using System.Threading;
+using System.Threading.Tasks;
 
 public static class GameState
 {
@@ -35,18 +37,21 @@ public class MenuController : MonoBehaviour
 
     public void OnJoinConfirm()
     {
-
+        GameState.GameMode = GameController.GameModeType.NETWORK_MULTIPLAYER;
+        SceneManager.LoadScene(1, LoadSceneMode.Single);
     }
 
-    public void OnCreateConfirm()
+    public async void OnCreateConfirm()
     {
-
+        GameState.GameMode = GameController.GameModeType.NETWORK_MULTIPLAYER;
+        await NetworkController.CreateNewMatchAsync();
+        SceneManager.LoadScene(1, LoadSceneMode.Single);
     }
 
     public void OnCopyMatchID(Text textObject)
     {
         TextEditor matchID = new TextEditor();
-        matchID.text = Guid.NewGuid().ToString();
+        matchID.text = NetworkController.MatchID;
         matchID.SelectAll();
         matchID.Copy();
         textObject.text = "Match ID copied!";

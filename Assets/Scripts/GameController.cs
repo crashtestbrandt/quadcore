@@ -21,6 +21,7 @@ public class GameController : MonoBehaviour
 
     public GameObject PlayerPrefab;
     public GameObject AIPlayerPrefab;
+    public GameObject RemotePlayerPrefab;
     public GameObject BallPrefab;
     public GameObject InfoUI;
 
@@ -33,6 +34,7 @@ public class GameController : MonoBehaviour
 
     GameObject[] players;
     int currentPlayer;
+    int remotePlayerNumber;
 
     public static bool Quitting { get; set; }
     public static bool GameOver { get; set; }
@@ -78,6 +80,7 @@ public class GameController : MonoBehaviour
 
         players = new GameObject[2];
         currentPlayer = UnityEngine.Random.Range(1,3);
+        if (gameMode == GameModeType.NETWORK_MULTIPLAYER) remotePlayerNumber = UnityEngine.Random.Range(1,3);
         OnResetTurn();
     }
 
@@ -124,6 +127,14 @@ public class GameController : MonoBehaviour
                         players[currentPlayer-1] = Instantiate(AIPlayerPrefab, this.transform.position, Quaternion.identity);
                     break;
                 case GameModeType.NETWORK_MULTIPLAYER:
+                        if (currentPlayer == remotePlayerNumber)
+                        {
+                            players[currentPlayer-1] = Instantiate(RemotePlayerPrefab, this.transform.position, Quaternion.identity);
+                        }
+                        else
+                        {
+                            players[currentPlayer-1] = Instantiate(PlayerPrefab, this.transform.position, Quaternion.identity);
+                        }
                     break;
                 case GameModeType.AI_VS_AI:
                     players[currentPlayer-1] = Instantiate(AIPlayerPrefab, this.transform.position, Quaternion.identity);

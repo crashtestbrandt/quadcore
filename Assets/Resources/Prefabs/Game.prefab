@@ -2472,6 +2472,8 @@ MonoBehaviour:
     type: 3}
   AIPlayerPrefab: {fileID: 4216462943911331701, guid: 57ab0de7eb0eeb547ac69cbc7cc07eca,
     type: 3}
+  RemotePlayerPrefab: {fileID: 1167821655604528494, guid: 8984783e184add140b17bf04d0d8d23c,
+    type: 3}
   BallPrefab: {fileID: 2806365362016205154, guid: 7963b04cbe7dea9458b9d8d429212096,
     type: 3}
   InfoUI: {fileID: 1762836667800595471}
@@ -3626,9 +3628,9 @@ MonoBehaviour:
   m_HandleRect: {fileID: 6586656531406198082}
   m_Direction: 0
   m_MinValue: 0
-  m_MaxValue: 50
+  m_MaxValue: 100
   m_WholeNumbers: 1
-  m_Value: 15
+  m_Value: 40
   m_OnValueChanged:
     m_PersistentCalls:
       m_Calls: []

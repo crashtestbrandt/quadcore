@@ -38,6 +38,11 @@ public class PlayerController : MonoBehaviour, IPlayerController
 
     public void StartTurn()
     {
+        Debug.Log("Local player starting turn");
+        if (debugText != null)
+        {
+            debugText.text = "Turn: Player " + playerNumber + " (local)";
+        }
         ChosenOrbPrefab = OrbPrefabs[playerNumber-1];
         orb = Instantiate(
             ChosenOrbPrefab,

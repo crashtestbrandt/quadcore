@@ -13,11 +13,20 @@ public class NetworkController : Singleton<NetworkController>
 {
     public static FirebaseUser User { get; private set; }
     public static FirebaseFunctions NetworkFunctions { get; private set; }
+    public static string MatchID { get; set; }
 
 
     // Start is called before the first frame update
     async void Start()
     {
+        NetworkController.MatchID = Convert.ToBase64String(
+                Guid.NewGuid()
+                .ToByteArray()
+            )
+            .Replace("/","-")
+            .Replace("+","_")
+            .Replace("=","");
+        
         Debug.Log("Checking Firebase dependencies ...");
         await FirebaseApp.CheckAndFixDependenciesAsync();
 
@@ -29,7 +38,6 @@ public class NetworkController : Singleton<NetworkController>
 
         // Without this delay, cloud function gets called before dependencies are in place
         await Task.Delay(TimeSpan.FromSeconds(5.0f));
-        Debug.Log("Attempting to call cloud function ...");
         NetworkFunctions = FirebaseFunctions.DefaultInstance;
 
         /*
@@ -50,5 +58,27 @@ public class NetworkController : Singleton<NetworkController>
         Debug.Log("Original: " + result.Data["original"]);
         */
 
+    }
+
+    static public async Task CreateNewMatchAsync(string matchID = null)
+    {
+        if (matchID == null)
+        {
+            matchID = MatchID;
+        }
+        Debug.Log("Creating a new QUADCORE match in firebase with ID: " + matchID);
+
+        var function = NetworkFunctions.GetHttpsCallable("addMatch");
+        var data = new Dictionary<string, object>();
+        data["match_id"] = matchID;
+        /*
+        data["players"] = new string[]
+        {
+            "TestPlayer",
+            null
+        };
+        */
+        dynamic result = await function.CallAsync(data);
+        Debug.Log("Write result: " + result?.Data["result"]);
     }
 }
